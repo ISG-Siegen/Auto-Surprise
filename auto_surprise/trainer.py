@@ -1,6 +1,7 @@
 from surprise.model_selection import cross_validate
 from auto_surprise.algorithms.auto_surprise_svd import AutoSurpriseSVD
 from auto_surprise.algorithms.auto_surprise_knn_basic import AutoSurpriseKNNBasic
+from auto_surprise.algorithms.auto_surprise_knn_with_means import AutoSurpriseKNNWithMeans
 from auto_surprise.constants import ALGORITHM_MAP
 import sys
 

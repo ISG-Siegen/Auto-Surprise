@@ -18,6 +18,9 @@ class Engine(object):
         algorithms = ALGORITHM_MAP.keys()
         iteration = 0
         while True:
+            if self._debug:
+                print("Iteration: %i" % iteration)
+
             tasks[iteration] = {}
             futures = {}
             with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -44,7 +47,7 @@ class Engine(object):
                 algorithms_count = round(len(algorithms) / 2)
                 algorithms = algorithms_ranking[0:algorithms_count]
                 iteration += 1
-                
+
         best_model = list(tasks[iteration].keys())[0]
         best_params = tasks[iteration][best_model][0]
         best_score = tasks[iteration][best_model][1]['loss']
