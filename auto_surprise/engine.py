@@ -1,5 +1,7 @@
-from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC
+from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC, MAX_WORKERS
 from auto_surprise.trainer import Trainer
+
+from surprise.model_selection import KFold
 import concurrent.futures
 
 class Engine(object):
@@ -23,7 +25,7 @@ class Engine(object):
 
             tasks[iteration] = {}
             futures = {}
-            with concurrent.futures.ThreadPoolExecutor() as executor:
+            with concurrent.futures.ProcessPoolExecutor(max_workers = MAX_WORKERS) as executor:
                 # Run for N algorithms
                 for algo in algorithms:
                     if self._debug:
@@ -49,7 +51,7 @@ class Engine(object):
                 iteration += 1
 
         best_model = list(tasks[iteration].keys())[0]
-        best_params = tasks[iteration][best_model][0]
+        best_params = tasks[iteration][best_model][1]
         best_score = tasks[iteration][best_model][1]['loss']
 
-        return best_model, best_params, best_score
+        return best_model, best_params, best_score, tasks
