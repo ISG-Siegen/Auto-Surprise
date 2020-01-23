@@ -1,7 +1,7 @@
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from surprise import SVDpp
 from surprise.model_selection import cross_validate
-from auto_surprise.constants import DEFAULT_MAX_EVALS, DEFAULT_TARGET_METRIC
+from auto_surprise.constants import DEFAULT_MAX_EVALS, DEFAULT_TARGET_METRIC, ACCURACY_METRICS, CV_N_JOBS
 
 SPACE = {
     'n_factors': hp.choice('n_factors', range(1, 100)),
@@ -11,16 +11,17 @@ SPACE = {
 }
 
 class AutoSurpriseSVDpp(object):
-    def __init__(self, cv=5, metric=DEFAULT_TARGET_METRIC, data=None, debug=False):
+    def __init__(self, cv=5, metric=DEFAULT_TARGET_METRIC, data=None, cv_n_jobs=CV_N_JOBS, debug=False):
         self._cv = cv
         self._metric = metric
         self._data = data
         self._debug = debug
+        self._cv_n_jobs = cv_n_jobs
 
     def _hyperopt(self, params):
         print(params)
         algo = SVDpp(n_factors=params['n_factors'], n_epochs=params['n_epochs'], lr_all=params['lr_all'], reg_all=params['reg_all'])
-        return cross_validate(algo, self._data, measures=['RMSE', 'MAE'], cv=self._cv, verbose=self._debug)[self._metric].mean()
+        return cross_validate(algo, self._data, measures=ACCURACY_METRICS, cv=self._cv, n_jobs=self._cv_n_jobs, verbose=self._debug)[self._metric].mean()
 
     def _objective(self, params):
         loss = self._hyperopt(params)

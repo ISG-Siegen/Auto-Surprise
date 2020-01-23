@@ -13,17 +13,17 @@ from auto_surprise.algorithms.auto_surprise_co_clustering import AutoSurpriseCoC
 from auto_surprise.algorithms.auto_surprise_normal_predictor import AutoSurpriseNormalPredictor
 from auto_surprise.algorithms.auto_surprise_baseline_only import AutoSurpriseBaselineOnly
 
-from auto_surprise.constants import ALGORITHM_MAP
+from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC, CV_N_JOBS
 import sys
 
 class Trainer(object):
-    def __init__(self, algo=None, data=None, debug=False):
+    def __init__(self, algo=None, data=None, target_metric=DEFAULT_TARGET_METRIC, debug=False):
         """
         Initialize new trainer
         """
         self._debug = debug
         # Dynamically instantiate algorithm
-        self.algo = getattr(sys.modules[__name__], ALGORITHM_MAP[algo])(data=data, debug=debug)
+        self.algo = getattr(sys.modules[__name__], ALGORITHM_MAP[algo])(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
     def start(self):
         best, trials = self.algo.best_hyperparams()
