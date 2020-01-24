@@ -12,8 +12,9 @@ ALGORITHM_MAP = {
     'normal_predictor': 'AutoSurpriseNormalPredictor',
 }
 
-FULL_ALGO_LIST = ['svd', 'svdpp', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only', 'normal_predictor']
-QUICK_COMPUTE_ALGO_LIST = ['svd', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only', 'normal_predictor']
+FULL_ALGO_LIST = ['svd', 'svdpp', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
+QUICK_COMPUTE_ALGO_LIST = ['svd', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
+BASELINE_ALGO = 'normal_predictor'
 
 DEFAULT_TARGET_METRIC = 'test_rmse'
 
@@ -29,8 +30,8 @@ ACCURACY_METRICS = [
     'MSE',
 ]
 
-DEFAULT_MAX_EVALS = 15
+DEFAULT_MAX_EVALS = 10
 
-MAX_WORKERS = 20
+MAX_WORKERS = None
 
 CV_N_JOBS = -1

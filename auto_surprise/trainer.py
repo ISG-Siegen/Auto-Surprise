@@ -25,8 +25,8 @@ class Trainer(object):
         # Dynamically instantiate algorithm
         self.algo = getattr(sys.modules[__name__], ALGORITHM_MAP[algo])(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
-    def start(self):
-        best, trials = self.algo.best_hyperparams()
+    def start(self, max_evals):
+        best, trials = self.algo.best_hyperparams(max_evals=max_evals)
 
         best_trial = None
         # Sort best trial based on loss value
