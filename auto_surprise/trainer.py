@@ -43,7 +43,7 @@ class Trainer(object):
         except Exception as e:
             print('Exception : ', e)
 
-            if self._debug
+            if self._debug:
                 raise
 
             return False, False

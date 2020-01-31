@@ -58,14 +58,14 @@ class Engine(object):
                                 'score': score,
                                 'above_baseline': score['loss'] < baseline_loss
                             }
-                        else
-                            print('Cannot use algo : %s', %(algo))
+                        else:
+                            print('Cannot use algo : %s' % algo)
 
                             tasks[iteration][algo] = {
                                 'above_baseline': False,
                                 'exception': True
                             }
-                            
+
                 if len(tasks[iteration]) == 1:
                     break
                 else:
