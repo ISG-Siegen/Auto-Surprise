@@ -26,16 +26,24 @@ class Trainer(object):
         self.algo = getattr(sys.modules[__name__], ALGORITHM_MAP[algo])(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
     def start(self, max_evals):
-        best, trials = self.algo.best_hyperparams(max_evals=max_evals)
+        try:
+            best, trials = self.algo.best_hyperparams(max_evals=max_evals)
 
-        best_trial = None
-        # Sort best trial based on loss value
-        if best:
-            best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
-        else:
-            best_trial = trials
+            best_trial = None
+            # Sort best trial based on loss value
+            if best:
+                best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+            else:
+                best_trial = trials
 
-        if self._debug:
-            print("Best: ", best)
+            if self._debug:
+                print("Best: ", best)
 
-        return best, best_trial
+            return best, best_trial
+        except Exception as e:
+            print('Exception : ', e)
+
+            if self._debug
+                raise
+
+            return False, False

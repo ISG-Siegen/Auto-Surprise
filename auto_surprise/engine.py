@@ -1,4 +1,6 @@
-from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC, MAX_WORKERS, DEFAULT_MAX_EVALS, FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST, BASELINE_ALGO
+from auto_surprise.constants import (ALGORITHM_MAP, DEFAULT_TARGET_METRIC, MAX_WORKERS,
+                                    DEFAULT_MAX_EVALS, FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST,
+                                    BASELINE_ALGO, EVALS_MULTIPLIER)
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
 import auto_surprise.validation_util as validation_util
@@ -32,7 +34,7 @@ class Engine(object):
             while True:
                 print("Iteration: %i" % iteration)
 
-                max_evals = 5 * (iteration + 1)
+                max_evals = EVALS_MULTIPLIER * (iteration + 1)
                 tasks[iteration] = {}
                 futures = {}
                 with concurrent.futures.ProcessPoolExecutor(max_workers = MAX_WORKERS) as executor:
@@ -48,11 +50,22 @@ class Engine(object):
                     for future in concurrent.futures.as_completed(futures):
                         algo = futures[future]
                         hyperparams, score = future.result()
-                        tasks[iteration][algo] = {
-                            'hyperparameters': hyperparams,
-                            'score': score,
-                            'above_baseline': score['loss'] < baseline_loss
-                        }
+
+                        # If no exceptions, then include in tasks, else remove from algorithms list
+                        if hyperparams or score:
+                            tasks[iteration][algo] = {
+                                'hyperparameters': hyperparams,
+                                'score': score,
+                                'above_baseline': score['loss'] < baseline_loss
+                            }
+                        else
+                            print('Cannot use algo : %s', %(algo))
+
+                            tasks[iteration][algo] = {
+                                'above_baseline': False,
+                                'exception': True
+                            }
+                            
                 if len(tasks[iteration]) == 1:
                     break
                 else:
