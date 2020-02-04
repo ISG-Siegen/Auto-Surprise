@@ -43,24 +43,25 @@ if __name__ == '__main__':
 
     # Evaluate Surprise Algorithms
     for algo in algorithms:
-        start_time = time.time()
         algo_name = algo.__name__
 
         print("Running algorithm : %s" % algo_name)
 
         try:
+            start_time = time.time()
+
             cv_results = cross_validate(algo(), data, ['rmse', 'mae'])
+            
+            cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+            mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
+            mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
+
+            benchmark_results['Algorithm'].append(algo_name)
+            benchmark_results['RMSE'].append(mean_rmse)
+            benchmark_results['MAE'].append(mean_mae)
+            benchmark_results['Time'].append(cv_time)
         except Exception as e:
             print('Exception : ', e)
-
-        cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-        mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
-        mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
-
-        benchmark_results['Algorithm'].append(algo_name)
-        benchmark_results['RMSE'].append(mean_rmse)
-        benchmark_results['MAE'].append(mean_mae)
-        benchmark_results['Time'].append(cv_time)
 
     # Evaluate AutoSurprise without SVD++
     start_time = time.time()
