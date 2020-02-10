@@ -1,3 +1,8 @@
+"""
+Testing gridsearch for ml-100k dataset using same defined search space
+Algorihm used is KNNWithMeans as it showed the best performance.
+"""
+
 from surprise import Dataset
 from surprise import Reader
 from surprise import NormalPredictor
