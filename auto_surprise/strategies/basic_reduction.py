@@ -3,7 +3,7 @@ class BasicReduction(object):
     """
     A basic strategy for comparison of algorithms
     """
-    
+
     def filter_algorithms(self, tasks, algorithms):
         """
         Rank N algorithms and take the top N/2 algorithms which performed

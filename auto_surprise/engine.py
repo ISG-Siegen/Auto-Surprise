@@ -3,7 +3,7 @@ from auto_surprise.constants import (ALGORITHM_MAP, DEFAULT_TARGET_METRIC, MAX_W
                                     BASELINE_ALGO, EVALS_MULTIPLIER)
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
-import auto_surprise.strategies.basic_reduction as BasicReduction
+from auto_surprise.strategies.basic_reduction import BasicReduction
 import auto_surprise.validation_util as validation_util
 
 import concurrent.futures
