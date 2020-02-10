@@ -1,18 +1,15 @@
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from surprise import SlopeOne
 from surprise.model_selection import cross_validate
-from auto_surprise.constants import DEFAULT_MAX_EVALS, DEFAULT_TARGET_METRIC, ACCURACY_METRICS, CV_N_JOBS
+from auto_surprise.constants import DEFAULT_MAX_EVALS, ACCURACY_METRICS
+from auto_surprise.algorithms.base import AlgorithmBase
 
-class AutoSurpriseSlopeOne(object):
-    def __init__(self, cv=5, metric=DEFAULT_TARGET_METRIC, data=None, cv_n_jobs=CV_N_JOBS, debug=False):
-        self._cv = cv
-        self._metric = metric
-        self._data = data
-        self._debug = debug
-        self._cv_n_jobs = cv_n_jobs
-
+class AutoSurpriseSlopeOne(AlgorithmBase):
+    """
+    Wrapper for surprise.prediction_algorithms.slope_one.SlopeOne algorithm
+    SlopeOne does not require any hyperparameter tuning
+    """
     def _hyperopt(self):
-        # NOTE: SlopeOne algorithm doesnt require any hyperparameters
         algo = SlopeOne()
         return cross_validate(algo, self._data, measures=ACCURACY_METRICS, cv=self._cv, n_jobs=self._cv_n_jobs, verbose=self._debug)[self._metric].mean()
 
