@@ -3,6 +3,7 @@ from auto_surprise.constants import (ALGORITHM_MAP, DEFAULT_TARGET_METRIC, MAX_W
                                     BASELINE_ALGO, EVALS_MULTIPLIER)
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
+import auto_surprise.strategies.basic_reduction as BasicReduction
 import auto_surprise.validation_util as validation_util
 
 import concurrent.futures
@@ -29,6 +30,7 @@ class Engine(object):
             baseline_loss = baseline_trainer.start(1)[1]['loss']
 
             tasks = {}
+            strategy = BasicReduction()
             algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
             iteration = 0
             while True:
@@ -69,15 +71,7 @@ class Engine(object):
                 if len(tasks[iteration]) == 1:
                     break
                 else:
-                    """
-                    Rank N algorithms and take the top N/2 algorithms which performed
-                    better than baseline result for the next iteration
-                    """
-                    filtered_algorithms = dict(filter(lambda algo: algo[1]['above_baseline'], tasks[iteration].items()))
-                    algorithms_ranking = [i[0] for i in sorted(filtered_algorithms.items(), key=lambda x: x[1]['score']['loss'], reverse=False)]
-                    # TODO: Think of a better alternative for this
-                    algorithms_count = round(len(algorithms) / 2)
-                    algorithms = algorithms_ranking[0:algorithms_count]
+                    algorithms = strategy.filter_algorithms(tasks[iteration], algorithms)
                     iteration += 1
 
             best_model = list(tasks[iteration].keys())[0]
