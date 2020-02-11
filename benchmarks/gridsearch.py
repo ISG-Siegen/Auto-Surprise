@@ -42,7 +42,8 @@ if __name__ == '__main__':
         'Algorithm': [],
         'RMSE': [],
         'MAE': [],
-        'Time': []
+        'Time': [],
+        'Best params': []
     }
 
     SIMILARITY_OPTIONS_SPACE = {
@@ -69,8 +70,9 @@ if __name__ == '__main__':
 
     benchmark_results['Algorithm'].append('KNN Gridsearch')
     benchmark_results['RMSE'].append(gs.best_score['rmse'])
-    benchmark_results['MAE'].append(gs.best_params['mae'])
+    benchmark_results['MAE'].append(gs.best_score['mae'])
     benchmark_results['Time'].append(cv_time)
+    benchmark_results['Best params'].append(gs.best_params)
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)
