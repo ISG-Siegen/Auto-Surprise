@@ -37,7 +37,7 @@ if __name__ == '__main__':
         start_time = time.time()
 
         algo = AutoSurpriseKNNWithMeans(data=data)
-        best_hyperparams, trials = algo.best_hyperparams(max_evals=2)
+        best_hyperparams, trials = algo.best_hyperparams(max_evals=20)
 
         best_trial = None
         best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
