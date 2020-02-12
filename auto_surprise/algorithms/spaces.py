@@ -16,6 +16,7 @@ SIMILARITY_OPTIONS_SPACE = {
 KNN_DEFAULT_SPACE = {
     'k': hp.choice('k', range(1,100)),
     'min_k': hp.choice('min_k', range(1,10)),
+    'sim_options': SIMILARITY_OPTIONS_SPACE
 }
 
 NMF_DEFAULT_SPACE = {

@@ -6,12 +6,10 @@ Algorihm used is KNNWithMeans as it showed the best performance.
 from surprise import Dataset
 from surprise import Reader
 from surprise.model_selection import cross_validate
-from surprise.model_selection import GridSearchCV
 
 import time
 import datetime
 import os
-import numpy as np
 import pandas as pd
 import sys
 
