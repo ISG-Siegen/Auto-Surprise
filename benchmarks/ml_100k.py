@@ -1,9 +1,21 @@
+"""
+Benchmark for ML 100k dataset
+"""
+
+import time
+import datetime
+import os
+import sys
+import numpy as np
+import pandas as pd
+
 from surprise import Dataset
 from surprise import Reader
 from surprise import NormalPredictor
 from surprise import BaselineOnly
 from surprise import KNNBasic
 from surprise import KNNWithMeans
+from surprise import KNNWithZScore
 from surprise import KNNBaseline
 from surprise import SVD
 from surprise import SVDpp
@@ -12,13 +24,6 @@ from surprise import SlopeOne
 from surprise import CoClustering
 from surprise.model_selection import cross_validate
 
-import time
-import datetime
-import os
-import numpy as np
-import pandas as pd
-import sys
-
 sys.path.insert(1, './')
 
 from auto_surprise.engine import Engine
@@ -26,7 +31,7 @@ from auto_surprise.engine import Engine
 if __name__ == '__main__':
     print("Starting benchmark")
     # Surprise algorithms to evaluate
-    algorithms = (SVD, SVDpp, NMF, SlopeOne, KNNBasic, KNNWithMeans, KNNBaseline, CoClustering, BaselineOnly, NormalPredictor)
+    algorithms = (SVD, SVDpp, NMF, SlopeOne, KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline, CoClustering, BaselineOnly, NormalPredictor)
 
     # Load Movielens 100k dataset Dataset
     file_path = os.path.expanduser('../datasets/ml-100k/u.data')
@@ -58,25 +63,9 @@ if __name__ == '__main__':
         benchmark_results['MAE'].append(mean_mae)
         benchmark_results['Time'].append(cv_time)
 
-    # Evaluate AutoSurprise without SVD++
-    start_time = time.time()
-    engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=True)
-    cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-
-    print("--------- Done ----------")
-    print("Best model: ", best_model)
-    print("Best params: ", best_params)
-    print("Best score: ", best_score)
-    print("All tasks: ", tasks)
-
-    benchmark_results['Algorithm'].append('AutoSurprise (No SVD++)')
-    benchmark_results['RMSE'].append(best_score)
-    benchmark_results['MAE'].append(best_score)
-    benchmark_results['Time'].append(cv_time)
-
     # Evaluate AutoSurprise
     start_time = time.time()
+    engine = Engine(debug=False)
     best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False)
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
 

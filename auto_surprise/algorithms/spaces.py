@@ -1,3 +1,7 @@
+"""
+Spaces defined for the algorithms to user
+"""
+
 from hyperopt import hp
 
 SVD_DEFAULT_SPACE = {
@@ -14,8 +18,8 @@ SIMILARITY_OPTIONS_SPACE = {
 }
 
 KNN_DEFAULT_SPACE = {
-    'k': hp.choice('k', range(1,100)),
-    'min_k': hp.choice('min_k', range(1,10)),
+    'k': hp.choice('k', range(1, 100)),
+    'min_k': hp.choice('min_k', range(1, 10)),
     'sim_options': SIMILARITY_OPTIONS_SPACE
 }
 
@@ -25,7 +29,7 @@ NMF_DEFAULT_SPACE = {
 }
 
 CO_CLUSTERING_DEFAULT_SPACE = {
-    'n_cltr_u': hp.choice('n_cltr_u', range(1,30)),
-    'n_cltr_i': hp.choice('n_cltr_i', range(1,30)),
-    'n_epochs': hp.choice('n_epochs', range(5,50)),
+    'n_cltr_u': hp.choice('n_cltr_u', range(1, 30)),
+    'n_cltr_i': hp.choice('n_cltr_i', range(1, 30)),
+    'n_epochs': hp.choice('n_epochs', range(5, 50)),
 }
