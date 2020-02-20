@@ -13,11 +13,12 @@ from surprise import Dataset
 from auto_surprise.engine import Engine
 
 # Load the dataset
-data = Dataset.load_builtin('ml-100k')
+if __name__ == '__main__':
+    data = Dataset.load_builtin('ml-100k')
 
-# Intitialize auto surprise engine
-engine = Engine(debug=False)
+    # Intitialize auto surprise engine
+    engine = Engine(debug=False)
 
-# Start the trainer
-best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse')
+    # Start the trainer
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse')
 ```
