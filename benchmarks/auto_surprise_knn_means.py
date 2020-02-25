@@ -3,15 +3,15 @@ Testing gridsearch for ml-100k dataset using same defined search space
 Algorihm used is KNNWithMeans as it showed the best performance.
 """
 
-from surprise import Dataset
-from surprise import Reader
-from surprise.model_selection import cross_validate
-
+import sys
 import time
 import datetime
 import os
 import pandas as pd
-import sys
+
+from surprise import Dataset
+from surprise import Reader
+from surprise.model_selection import cross_validate
 
 sys.path.insert(1, './')
 
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     }
 
     for i in range(0, 100):
+        print("Iteration : " + i)
         start_time = time.time()
 
         algo = AutoSurpriseKNNWithMeans(data=data)

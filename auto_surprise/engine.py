@@ -39,7 +39,7 @@ class Engine(object):
                 max_evals = EVALS_MULTIPLIER * (iteration + 1)
                 tasks[iteration] = {}
                 futures = {}
-                with concurrent.futures.ProcessPoolExecutor(max_workers = MAX_WORKERS) as executor:
+                with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
                     # Run for N algorithms
                     for algo in algorithms:
                         if self._debug:
