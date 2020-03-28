@@ -9,7 +9,7 @@ class AutoSurpriseSVDpp(AlgorithmBase):
     """
     Wrapper for surprise.prediction_algorithms.matrix_factorization.SVDpp
     """
-    
+
     def _hyperopt(self, params):
         algo = SVDpp(**params)
         return cross_validate(algo, self._data, measures=ACCURACY_METRICS, cv=self._cv, n_jobs=self._cv_n_jobs, verbose=self._debug)[self._metric].mean()
@@ -19,6 +19,12 @@ class AutoSurpriseSVDpp(AlgorithmBase):
         return {'loss': loss, 'status': STATUS_OK}
 
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
-        trials = Trials()
-        best = fmin(self._objective, SVD_DEFAULT_SPACE, algo=tpe.suggest, max_evals=max_evals, trials=trials)
-        return best, trials
+        best = fmin(
+            self._objective,
+            SVD_DEFAULT_SPACE,
+            algo=tpe.suggest,
+            max_evals=max_evals,
+            trials=self.trials
+        )
+
+        return best, self.trials
