@@ -18,6 +18,11 @@ class AutoSurpriseCoClustering(AlgorithmBase):
         return {'loss': loss, 'status': STATUS_OK}
 
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
-        trials = Trials()
-        best = fmin(self._objective, CO_CLUSTERING_DEFAULT_SPACE, algo=tpe.suggest, max_evals=max_evals, trials=trials)
+        best = fmin(
+            self._objective,
+            CO_CLUSTERING_DEFAULT_SPACE,
+            algo=tpe.suggest,
+            max_evals=max_evals,
+            trials=self.trials
+        )
         return best, trials
