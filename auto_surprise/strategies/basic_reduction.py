@@ -2,17 +2,12 @@ import concurrent.futures
 
 from auto_surprise.constants import (EVALS_MULTIPLIER, MAX_WORKERS)
 from auto_surprise.trainer import Trainer
+from auto_surprise.strategies.base import StrategyBase
 
-class BasicReduction():
+class BasicReduction(StrategyBase):
     """
     A basic strategy for comparison of algorithms
     """
-    def __init__(self, algorithms, data, target_metric, baseline_loss, debug=False):
-        self.algorithms = algorithms
-        self.data = data
-        self.target_metric = target_metric
-        self.baseline_loss = baseline_loss
-        self._debug = debug
 
     def evaluate(self):
         """

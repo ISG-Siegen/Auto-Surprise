@@ -25,4 +25,4 @@ class AutoSurpriseCoClustering(AlgorithmBase):
             max_evals=max_evals,
             trials=self.trials
         )
-        return best, trials
+        return best, self.trials
