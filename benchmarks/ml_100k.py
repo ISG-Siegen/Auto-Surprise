@@ -66,7 +66,7 @@ if __name__ == '__main__':
     # Evaluate AutoSurprise
     start_time = time.time()
     engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, time_limit=7200, max_evals=500)
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=7200, max_evals=500)
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
 
     print("--------- Done ----------")

@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # Run auto surprise
     start_time = time.time()
     engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks=engine.train(data=data, target_metric='test_rmse', quick_compute=True)
+    best_model, best_params, best_score, tasks=engine.train(data=data, target_metric='test_rmse', cpu_time_limit=3600)
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
 
     print("--------- Done ----------")
