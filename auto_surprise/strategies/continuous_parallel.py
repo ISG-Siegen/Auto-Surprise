@@ -45,13 +45,14 @@ class ContinuousParallel(StrategyBase):
                     print('Cannot use algo : %s' % algo)
 
                     tasks[algo] = {
+                        'score': { 'loss': 100 },
                         'above_baseline': False,
                         'exception': True
                     }
 
         print(tasks)
 
-        best_model = max(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
+        best_model = min(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
         best_params = tasks[best_model]['hyperparameters']
         best_score = tasks[best_model]['score']['loss']
 
