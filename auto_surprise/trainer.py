@@ -14,6 +14,9 @@ from auto_surprise.algorithms.auto_surprise_normal_predictor import AutoSurprise
 from auto_surprise.algorithms.auto_surprise_baseline_only import AutoSurpriseBaselineOnly
 
 from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC, CV_N_JOBS
+from auto_surprise.context.limits import TimeoutException
+import auto_surprise.context.limits as limits
+
 import sys
 
 class Trainer(object):
@@ -47,3 +50,25 @@ class Trainer(object):
                 raise
 
             return False, False
+
+    def start_with_limits(self, max_evals, time_limit=None):
+        try:
+            with limits.run_with_enforced_limits(time_limit=time_limit):
+                best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
+
+        except TimeoutException as e:
+            # Handle timeout when enforced cpu time limit is reached
+            trials = self.algo.trials
+            best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+            best = False
+
+        except Exception as e:
+            print('Exception : ', e)
+
+            if self._debug:
+                raise
+
+            best = False
+            best_trial = False
+
+        return best, best_trial

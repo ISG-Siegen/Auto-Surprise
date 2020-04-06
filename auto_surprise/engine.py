@@ -1,3 +1,5 @@
+import pathlib
+
 from auto_surprise.constants import (
     DEFAULT_TARGET_METRIC, DEFAULT_MAX_EVALS,
     FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST,
@@ -6,6 +8,7 @@ from auto_surprise.constants import (
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
 from auto_surprise.strategies.basic_reduction import BasicReduction
+from auto_surprise.strategies.continuous_parallel import ContinuousParallel
 import auto_surprise.validation_util as validation_util
 
 class Engine(object):
@@ -14,11 +17,21 @@ class Engine(object):
         Initialize new engine
         """
         self._debug = debug
+        self.current_path = pathlib.Path().absolute()
 
-    def train(self, target_metric=DEFAULT_TARGET_METRIC, data=None, max_evals=DEFAULT_MAX_EVALS, quick_compute=False):
+    def train(
+        self,
+        target_metric=DEFAULT_TARGET_METRIC,
+        data=None,
+        max_evals=DEFAULT_MAX_EVALS,
+        quick_compute=False,
+        cpu_time_limit=None,
+        strategy="continuos_parallel"
+    ):
         """
         Train and find most optimal model and hyperparameters
         """
+
         try:
             # Validations
             validation_util.validate_target_metric(target_metric)
@@ -39,12 +52,23 @@ class Engine(object):
         algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
 
         # Select the strategy
-        strategy = BasicReduction(
-            algorithms,
-            data,
-            target_metric, 
-            baseline_loss,
-            debug=self._debug
-        )
+        if strategy == 'continuos_parallel':
+            strategy = ContinuousParallel(
+                algorithms,
+                data,
+                target_metric,
+                baseline_loss,
+                max_evals=max_evals,
+                time_limit=cpu_time_limit,
+                debug=self._debug
+            )
+        else:
+            strategy = BasicReduction(
+                algorithms,
+                data,
+                target_metric,
+                baseline_loss,
+                debug=self._debug
+            )
 
         return strategy.evaluate()
