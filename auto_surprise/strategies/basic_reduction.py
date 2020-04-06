@@ -42,7 +42,7 @@ class BasicReduction(StrategyBase):
                         tasks[iteration][algo] = {
                             'hyperparameters': hyperparams,
                             'score': score,
-                            'above_baseline': score['loss'] < baseline_loss
+                            'above_baseline': score['loss'] < self.baseline_loss
                         }
                     else:
                         print('Cannot use algo : %s' % algo)

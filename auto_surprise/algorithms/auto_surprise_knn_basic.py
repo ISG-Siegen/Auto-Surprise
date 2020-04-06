@@ -12,7 +12,11 @@ class AutoSurpriseKNNBasic(AlgorithmBase):
 
     def _objective(self, params):
         loss = self._hyperopt(params)
-        return { 'loss': loss, 'status': STATUS_OK }
+        return {
+            'loss': loss,
+            'status': STATUS_OK,
+            'hyperparams': params
+        }
 
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
         best = fmin(
@@ -22,5 +26,5 @@ class AutoSurpriseKNNBasic(AlgorithmBase):
             max_evals=max_evals,
             trials=self.trials
         )
-        
+
         return best, self.trials

@@ -54,11 +54,12 @@ class Trainer(object):
     def start_with_limits(self, max_evals, time_limit=None):
         try:
             with limits.run_with_enforced_limits(time_limit=time_limit):
-                best, trials = self.algo.best_hyperparams(max_evals=max_evals)
+                best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
 
         except TimeoutException as e:
             # Handle timeout when enforced cpu time limit is reached
             trials = self.algo.trials
+            best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
             best = False
 
         except Exception as e:
@@ -68,6 +69,6 @@ class Trainer(object):
                 raise
 
             best = False
-            trials = False
+            best_trial = False
 
-        return best, trials
+        return best, best_trial

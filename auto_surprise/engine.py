@@ -25,6 +25,7 @@ class Engine(object):
         data=None,
         max_evals=DEFAULT_MAX_EVALS,
         quick_compute=False,
+        cpu_time_limit=None,
         strategy="continuos_parallel"
     ):
         """
@@ -57,7 +58,8 @@ class Engine(object):
                 data,
                 target_metric,
                 baseline_loss,
-                time_limit=300,
+                max_evals=max_evals,
+                time_limit=cpu_time_limit,
                 debug=self._debug
             )
         else:

@@ -15,7 +15,11 @@ class AutoSurpriseSlopeOne(AlgorithmBase):
 
     def _objective(self):
         loss = self._hyperopt()
-        return { 'loss': loss, 'status': STATUS_OK }
+        return {
+            'loss': loss,
+            'status': STATUS_OK,
+            'hyperparams': None
+        }
 
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
         best = self._objective()
