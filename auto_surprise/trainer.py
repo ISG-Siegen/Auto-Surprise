@@ -59,7 +59,12 @@ class Trainer(object):
         except TimeoutException as e:
             # Handle timeout when enforced cpu time limit is reached
             trials = self.algo.trials
-            best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+
+            if trials.results:
+                best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+            else:
+                best_trial = False
+
             best = False
 
         except Exception as e:

@@ -45,6 +45,7 @@ class ContinuousParallel(StrategyBase):
                     print('Cannot use algo : %s' % algo)
 
                     tasks[algo] = {
+                        'hyperparameters': None,
                         'score': { 'loss': 100 },
                         'above_baseline': False,
                         'exception': True
