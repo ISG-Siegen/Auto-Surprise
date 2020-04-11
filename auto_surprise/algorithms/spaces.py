@@ -6,9 +6,21 @@ from hyperopt import hp
 
 SVD_DEFAULT_SPACE = {
     'n_factors': hp.choice('n_factors', range(1, 100)),
-    'n_epochs': hp.choice('n_epochs', range(1, 20)),
-    'lr_all': hp.uniform('lr_all', 0.001, 0.3),
-    'reg_all': hp.uniform('reg_all', 0.001, 0.3),
+    'n_epochs': hp.choice('n_epochs', range(5, 100)),
+    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.3),
+    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.3),
+    'lr_pu': hp.uniform('lr_pu', 0.0001, 0.3),
+    'lr_qi': hp.uniform('lr_qi', 0.0001, 0.3),
+    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.3),
+    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.3),
+    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.3),
+    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.3)
+}
+
+SVDPP_SPACE = {
+    **SVD_DEFAULT_SPACE,
+    'lr_yj': hp.uniform('lr_yj', 0.0001, 0.3),
+    'reg_yj': hp.uniform('reg_yj', 0.0001, 0.3)
 }
 
 SIMILARITY_OPTIONS_SPACE = {
@@ -25,11 +37,18 @@ KNN_DEFAULT_SPACE = {
 
 NMF_DEFAULT_SPACE = {
     'n_factors': hp.choice('n_factors', range(1, 100)),
-    'n_epochs': hp.choice('n_epochs', range(1, 20)),
+    'n_epochs': hp.choice('n_epochs', range(5, 100)),
+    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.3),
+    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.3),
+    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.3),
+    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.3),
+    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.3),
+    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.3),
+    'biased': hp.choice('biased', [False, True])
 }
 
 CO_CLUSTERING_DEFAULT_SPACE = {
     'n_cltr_u': hp.choice('n_cltr_u', range(1, 30)),
     'n_cltr_i': hp.choice('n_cltr_i', range(1, 30)),
-    'n_epochs': hp.choice('n_epochs', range(5, 50)),
+    'n_epochs': hp.choice('n_epochs', range(5, 100)),
 }
