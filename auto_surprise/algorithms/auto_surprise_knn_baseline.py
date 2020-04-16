@@ -2,7 +2,7 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from surprise import KNNBaseline
 from surprise.model_selection import cross_validate
 from auto_surprise.constants import DEFAULT_MAX_EVALS, ACCURACY_METRICS
-from auto_surprise.algorithms.spaces import KNN_DEFAULT_SPACE
+from auto_surprise.algorithms.spaces import KNN_BASELINE_SPACE
 from auto_surprise.algorithms.base import AlgorithmBase
 
 class AutoSurpriseKNNBaseline(AlgorithmBase):
@@ -21,7 +21,7 @@ class AutoSurpriseKNNBaseline(AlgorithmBase):
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
         best = fmin(
             self._objective,
-            KNN_DEFAULT_SPACE,
+            KNN_BASELINE_SPACE,
             algo=tpe.suggest,
             max_evals=max_evals,
             trials=self.trials
