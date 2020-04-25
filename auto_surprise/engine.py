@@ -3,7 +3,8 @@ import pathlib
 from auto_surprise.constants import (
     DEFAULT_TARGET_METRIC, DEFAULT_MAX_EVALS,
     FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST,
-    BASELINE_ALGO, EVALS_MULTIPLIER
+    BASELINE_ALGO, EVALS_MULTIPLIER,
+    SURPRISE_ALGORITHM_MAP
 )
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
@@ -72,3 +73,10 @@ class Engine(object):
             )
 
         return strategy.evaluate()
+
+    def build_model(self, algo_name, params):
+        algo = SURPRISE_ALGORITHM_MAP[algo_name]
+        if (params):
+            return algo(**params)
+        else:
+            return algo()
