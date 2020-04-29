@@ -18,10 +18,12 @@ class AutoSurpriseNormalPredictor(AlgorithmBase):
 
     def _objective(self):
         loss = self._hyperopt()
+        self._result_logger.append_results(loss)
+
         return {
             'loss': loss,
             'status': STATUS_OK,
-            'hyperparams': None 
+            'hyperparams': None
         }
 
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):

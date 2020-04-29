@@ -7,20 +7,20 @@ from hyperopt import hp
 SVD_DEFAULT_SPACE = {
     'n_factors': hp.choice('n_factors', range(1, 100)),
     'n_epochs': hp.choice('n_epochs', range(5, 200)),
-    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.5),
-    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.5),
-    'lr_pu': hp.uniform('lr_pu', 0.0001, 0.5),
-    'lr_qi': hp.uniform('lr_qi', 0.0001, 0.5),
-    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.5),
-    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.5),
-    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.5),
-    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.5)
+    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.01),
+    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.01),
+    'lr_pu': hp.uniform('lr_pu', 0.0001, 0.01),
+    'lr_qi': hp.uniform('lr_qi', 0.0001, 0.01),
+    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.01),
+    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.01),
+    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.01),
+    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.01)
 }
 
 SVDPP_SPACE = {
     **SVD_DEFAULT_SPACE,
-    'lr_yj': hp.uniform('lr_yj', 0.0001, 0.5),
-    'reg_yj': hp.uniform('reg_yj', 0.0001, 0.5)
+    'lr_yj': hp.uniform('lr_yj', 0.0001, 0.01),
+    'reg_yj': hp.uniform('reg_yj', 0.0001, 0.01)
 }
 
 SIMILARITY_OPTIONS_SPACE = {
@@ -39,14 +39,14 @@ BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
     },
     {
         'method': 'sgd',
-        'reg': hp.uniform('reg', 0.0001, 0.5),
-        'learning_rate': hp.uniform('learning_rate', 0.0001, 0.5)
+        'reg': hp.uniform('reg', 0.0001, 0.01),
+        'learning_rate': hp.uniform('learning_rate', 0.0001, 0.01)
     }
 ])
 
 KNN_DEFAULT_SPACE = {
     'k': hp.choice('k', range(1, 500)),
-    'min_k': hp.choice('min_k', range(1, 10)),
+    'min_k': hp.choice('min_k', range(1, 30)),
     'sim_options': SIMILARITY_OPTIONS_SPACE
 }
 
@@ -58,12 +58,12 @@ KNN_BASELINE_SPACE = {
 NMF_DEFAULT_SPACE = {
     'n_factors': hp.choice('n_factors', range(1, 100)),
     'n_epochs': hp.choice('n_epochs', range(5, 200)),
-    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.5),
-    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.5),
-    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.5),
-    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.5),
-    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.5),
-    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.5),
+    'lr_bu': hp.uniform('lr_bu', 0.0001, 0.01),
+    'lr_bi': hp.uniform('lr_bi', 0.0001, 0.01),
+    'reg_bu': hp.uniform('reg_bu', 0.0001, 0.01),
+    'reg_bi': hp.uniform('reg_bi', 0.0001, 0.01),
+    'reg_pu': hp.uniform('reg_pu', 0.0001, 0.01),
+    'reg_qi': hp.uniform('reg_qi', 0.0001, 0.01),
     'biased': hp.choice('biased', [False, True])
 }
 

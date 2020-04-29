@@ -9,3 +9,6 @@ class AlgorithmBase(object):
         self._debug = debug
         self._cv_n_jobs = cv_n_jobs
         self.trials = Trials()
+
+    def set_result_logger(self, result_logger_manager):
+        self._result_logger = result_logger_manager

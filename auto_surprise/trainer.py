@@ -15,22 +15,29 @@ from auto_surprise.algorithms.auto_surprise_baseline_only import AutoSurpriseBas
 
 from auto_surprise.constants import ALGORITHM_MAP, DEFAULT_TARGET_METRIC, CV_N_JOBS
 from auto_surprise.context.limits import TimeoutException
+from auto_surprise.context.result_logging_manager import ResultLoggingManager
 import auto_surprise.context.limits as limits
 
 import sys
 
 class Trainer(object):
-    def __init__(self, algo=None, data=None, target_metric=DEFAULT_TARGET_METRIC, debug=False):
+    def __init__(self, tmp_dir, algo=None, data=None, target_metric=DEFAULT_TARGET_METRIC, debug=False):
         """
         Initialize new trainer
         """
         self._debug = debug
+        self._tmp_dir = tmp_dir
+        self._algo_name = ALGORITHM_MAP[algo]
         # Dynamically instantiate algorithm
-        self.algo = getattr(sys.modules[__name__], ALGORITHM_MAP[algo])(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
+        self.algo = getattr(sys.modules[__name__], self._algo_name)(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
     def start(self, max_evals):
+
         try:
-            best, trials = self.algo.best_hyperparams(max_evals=max_evals)
+            with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+                self.algo.set_result_logger(result_logger)
+
+                best, trials = self.algo.best_hyperparams(max_evals=max_evals)
 
             best_trial = None
             # Sort best trial based on loss value
@@ -38,9 +45,6 @@ class Trainer(object):
                 best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
             else:
                 best_trial = trials
-
-            if self._debug:
-                print("Best: ", best)
 
             return best, best_trial
         except Exception as e:
@@ -54,7 +58,10 @@ class Trainer(object):
     def start_with_limits(self, max_evals, time_limit=None):
         try:
             with limits.run_with_enforced_limits(time_limit=time_limit):
-                best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
+                with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+                    self.algo.set_result_logger(result_logger)
+
+                    best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
 
         except TimeoutException as e:
             # Handle timeout when enforced cpu time limit is reached

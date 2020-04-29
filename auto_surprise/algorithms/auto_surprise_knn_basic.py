@@ -12,6 +12,8 @@ class AutoSurpriseKNNBasic(AlgorithmBase):
 
     def _objective(self, params):
         loss = self._hyperopt(params)
+        self._result_logger.append_results(loss)
+        
         return {
             'loss': loss,
             'status': STATUS_OK,
