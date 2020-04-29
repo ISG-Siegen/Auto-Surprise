@@ -11,7 +11,7 @@ class BackendContextManager():
         return self.temporary_directory
 
     def __exit__(self, *exc):
-        print("Stored temporary files in %s. This can be removed", % (self.temporary_directory.as_posix()))
+        print("Stored temporary files in %s. This can be removed" % (self.temporary_directory.as_posix()))
 
     def create_directories(self):
         self.temporary_directory.mkdir(parents=True)
