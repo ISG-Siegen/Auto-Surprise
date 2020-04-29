@@ -8,6 +8,7 @@ from auto_surprise.constants import (
 )
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
+from auto_surprise.context.backend import BackendContextManager
 from auto_surprise.strategies.basic_reduction import BasicReduction
 from auto_surprise.strategies.continuous_parallel import ContinuousParallel
 import auto_surprise.validation_util as validation_util
@@ -18,7 +19,7 @@ class Engine(object):
         Initialize new engine
         """
         self._debug = debug
-        self.current_path = pathlib.Path().absolute()
+        self._current_path = pathlib.Path().absolute()
 
     def train(
         self,
@@ -47,32 +48,37 @@ class Engine(object):
                 raise
 
         # Determine baseline value from random normal predictor
-        baseline_trainer = Trainer(algo=BASELINE_ALGO, data=data, target_metric=target_metric, debug=self._debug)
-        baseline_loss = baseline_trainer.start(1)[1]['loss']
+        with BackendContextManager(self._current_path) as tmp_dir:
+            baseline_trainer = Trainer(tmp_dir, algo=BASELINE_ALGO, data=data, target_metric=target_metric, debug=self._debug)
+            baseline_loss = baseline_trainer.start(1)[1]['loss']
 
-        algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
+            algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
 
-        # Select the strategy
-        if strategy == 'continuos_parallel':
-            strategy = ContinuousParallel(
-                algorithms,
-                data,
-                target_metric,
-                baseline_loss,
-                max_evals=max_evals,
-                time_limit=cpu_time_limit,
-                debug=self._debug
-            )
-        else:
-            strategy = BasicReduction(
-                algorithms,
-                data,
-                target_metric,
-                baseline_loss,
-                debug=self._debug
-            )
+            # Select the strategy
+            if strategy == 'continuos_parallel':
+                strategy = ContinuousParallel(
+                    algorithms,
+                    data,
+                    target_metric,
+                    baseline_loss,
+                    tmp_dir,
+                    max_evals=max_evals,
+                    time_limit=cpu_time_limit,
+                    debug=self._debug
+                )
+            else:
+                strategy = BasicReduction(
+                    algorithms,
+                    data,
+                    target_metric,
+                    baseline_loss,
+                    tmp_dir,
+                    debug=self._debug
+                )
 
-        return strategy.evaluate()
+            best_model, best_params, best_score, tasks = strategy.evaluate()
+
+        return best_model, best_params, best_score, tasks
 
     def build_model(self, algo_name, params):
         algo = SURPRISE_ALGORITHM_MAP[algo_name]

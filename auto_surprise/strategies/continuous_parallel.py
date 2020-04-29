@@ -25,7 +25,7 @@ class ContinuousParallel(StrategyBase):
             for algo in self.algorithms:
                 print("Starting thread with %s algorithm" % algo)
 
-                trainer = Trainer(algo=algo, data=self.data, target_metric=self.target_metric, debug=self._debug)
+                trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, debug=self._debug)
                 futures[
                     executor.submit(trainer.start_with_limits, max_evals, time_limit=self.time_limit)
                 ] = algo
@@ -50,8 +50,6 @@ class ContinuousParallel(StrategyBase):
                         'above_baseline': False,
                         'exception': True
                     }
-
-        print(tasks)
 
         best_model = min(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
         best_params = tasks[best_model]['hyperparameters']

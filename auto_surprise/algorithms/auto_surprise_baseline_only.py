@@ -11,6 +11,8 @@ class AutoSurpriseBaselineOnly(AlgorithmBase):
 
     def _objective(self):
         loss = self._hyperopt()
+        self._result_logger.append_results(loss)
+        
         return {
             'loss': loss,
             'status': STATUS_OK,

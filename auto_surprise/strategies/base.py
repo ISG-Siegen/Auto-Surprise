@@ -7,6 +7,7 @@ class StrategyBase():
         data,
         target_metric,
         baseline_loss,
+        temporary_directory,
         time_limit=None,
         max_evals=DEFAULT_MAX_EVALS,
         debug=False,
@@ -16,6 +17,7 @@ class StrategyBase():
         self.target_metric = target_metric
         self.baseline_loss = baseline_loss
         self.time_limit = time_limit
-        self.max_evals = max_evals
+        self.tmp_dir = temporary_directory
 
+        self.max_evals = max_evals
         self._debug = debug
