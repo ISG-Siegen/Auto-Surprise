@@ -1,3 +1,4 @@
+import traceback
 from surprise.model_selection import cross_validate
 
 # import algorithms
@@ -49,7 +50,7 @@ class Trainer(object):
             return best, best_trial
         except Exception as e:
             print('Exception : ', e)
-
+            print(traceback.format_exc())
             if self._debug:
                 raise
 
@@ -75,8 +76,8 @@ class Trainer(object):
             best = False
 
         except Exception as e:
-            print('Exception : ', e)
-
+            print(traceback.format_exc())
+            
             if self._debug:
                 raise
 
