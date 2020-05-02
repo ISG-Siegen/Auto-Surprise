@@ -4,6 +4,7 @@ from surprise import NormalPredictor
 from surprise import BaselineOnly
 from surprise import KNNBasic
 from surprise import KNNWithMeans
+from surprise import KNNWithZScore
 from surprise import KNNBaseline
 from surprise import SVD
 from surprise import SVDpp
