@@ -5,7 +5,7 @@ Spaces defined for the algorithms to user
 from hyperopt import hp
 
 SVD_DEFAULT_SPACE = {
-    'n_factors': hp.choice('n_factors', range(1, 1000)),
+    'n_factors': hp.choice('n_factors', range(1, 500)),
     'n_epochs': hp.choice('n_epochs', range(1, 200)),
     'lr_bu': hp.loguniform('lr_bu', 0.0001, 0.1),
     'lr_bi': hp.loguniform('lr_bi', 0.0001, 0.1),
@@ -27,14 +27,14 @@ SIMILARITY_OPTIONS_SPACE = {
     'name': hp.choice('name', ['cosine', 'msd', 'pearson', 'pearson_baseline']),
     'user_based': hp.choice('user_based', [False, True]),
     'min_support': hp.choice('min_support', range(1, 100)),
-    'shrinkage': hp.choice('shrinkage', range(1, 300))
+    # 'shrinkage': hp.choice('shrinkage', range(1, 300))
 }
 
 BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
     {
         'method': 'als',
-        'reg_i': hp.loguniform('reg_i', 1, 100),
-        'reg_u': hp.loguniform('reg_u', 1, 100),
+        'reg_i': hp.uniform('reg_i', 1, 100),
+        'reg_u': hp.uniform('reg_u', 1, 100),
         'n_epochs': hp.choice('n_epochs', range(5, 200)),
     },
     {
@@ -56,7 +56,7 @@ KNN_BASELINE_SPACE = {
 }
 
 NMF_DEFAULT_SPACE = {
-    'n_factors': hp.choice('n_factors', range(1, 1000)),
+    'n_factors': hp.choice('n_factors', range(1, 500)),
     'n_epochs': hp.choice('n_epochs', range(5, 200)),
     'lr_bu': hp.loguniform('lr_bu', 0.0001, 0.1),
     'lr_bi': hp.loguniform('lr_bi', 0.0001, 0.1),
