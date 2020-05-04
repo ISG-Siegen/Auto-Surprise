@@ -66,11 +66,14 @@ if __name__ == '__main__':
 
         except Exception as e:
             print('Exception : ', e)
+    print("--- Surprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Evaluate AutoSurprise
     start_time = time.time()
+    time_limt = 691200 # Run for 8 days
     engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=7200, max_evals=500)
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000)
 
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
     cv_results = cross_validate(engine.build_model(best_model, best_params), data, ['rmse', 'mae'])
