@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     # Evaluate AutoSurprise
     start_time = time.time()
-    time_limt = 691200 # Run for 8 days
+    time_limt = 518400 # Run for 6 days
     engine = Engine(debug=False)
     best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000)
 

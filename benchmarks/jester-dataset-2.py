@@ -64,6 +64,9 @@ if __name__ == '__main__':
         except Exception as e:
             print('Exception : ', e)
 
+    print("--- Surprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
+
     # Evaluate AutoSurprise
     start_time = time.time()
     engine = Engine(debug=False)
