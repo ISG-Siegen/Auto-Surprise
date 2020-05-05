@@ -2,7 +2,7 @@ from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from surprise import SVDpp
 from surprise.model_selection import cross_validate
 from auto_surprise.constants import DEFAULT_MAX_EVALS, ACCURACY_METRICS
-from auto_surprise.algorithms.spaces import SVD_DEFAULT_SPACE
+from auto_surprise.algorithms.spaces import SVDPP_SPACE
 from auto_surprise.algorithms.base import AlgorithmBase
 
 class AutoSurpriseSVDpp(AlgorithmBase):
@@ -17,7 +17,7 @@ class AutoSurpriseSVDpp(AlgorithmBase):
     def _objective(self, params):
         loss = self._hyperopt(params)
         self._result_logger.append_results(loss)
-        
+
         return {
             'loss': loss,
             'status': STATUS_OK,

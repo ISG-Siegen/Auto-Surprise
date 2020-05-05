@@ -8,7 +8,7 @@ class ResultLoggingManager():
         self._log_file_path = tmp_dir / "{0}_results.csv".format(algo_name)
 
     def __enter__(self):
-        self._log_file_writer = open(self._log_file_path, "w")
+        self._log_file_writer = open(self._log_file_path, "w", buffering=1)
         # Set headers
         self._log_file_writer.write("time,loss\n")
         return self
