@@ -27,7 +27,7 @@ class AutoSurpriseSVDpp(AlgorithmBase):
     def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
         best = fmin(
             self._objective,
-            SVD_DEFAULT_SPACE,
+            SVDPP_SPACE,
             algo=tpe.suggest,
             max_evals=max_evals,
             trials=self.trials
