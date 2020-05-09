@@ -42,30 +42,6 @@ if __name__ == '__main__':
         'Time': []
     }
 
-    # Evaluate Surprise Algorithms
-    for algo in algorithms:
-        algo_name = algo.__name__
-
-        print("Running algorithm : %s" % algo_name)
-
-        try:
-            start_time = time.time()
-
-            cv_results = cross_validate(algo(), data, ['rmse', 'mae'])
-
-            cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-            mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
-            mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
-
-            benchmark_results['Algorithm'].append(algo_name)
-            benchmark_results['RMSE'].append(mean_rmse)
-            benchmark_results['MAE'].append(mean_mae)
-            benchmark_results['Time'].append(cv_time)
-        except Exception as e:
-            print('Exception : ', e)
-
-    print("--- Surprise results ---")
-    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Evaluate AutoSurprise
     start_time = time.time()
@@ -89,6 +65,31 @@ if __name__ == '__main__':
     benchmark_results['RMSE'].append(mean_rmse)
     benchmark_results['MAE'].append(mean_mae)
     benchmark_results['Time'].append(cv_time)
+
+    # Evaluate Surprise Algorithms
+    for algo in algorithms:
+        algo_name = algo.__name__
+
+        print("Running algorithm : %s" % algo_name)
+
+        try:
+            start_time = time.time()
+
+            cv_results = cross_validate(algo(), data, ['rmse', 'mae'], cv=3)
+
+            cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+            mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
+            mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
+
+            benchmark_results['Algorithm'].append(algo_name)
+            benchmark_results['RMSE'].append(mean_rmse)
+            benchmark_results['MAE'].append(mean_mae)
+            benchmark_results['Time'].append(cv_time)
+        except Exception as e:
+            print('Exception : ', e)
+
+    print("--- Surprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)
