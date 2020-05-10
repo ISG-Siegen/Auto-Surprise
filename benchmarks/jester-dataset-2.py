@@ -66,6 +66,9 @@ if __name__ == '__main__':
     benchmark_results['MAE'].append(mean_mae)
     benchmark_results['Time'].append(cv_time)
 
+    print("--- AutoSurprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
+
     # Evaluate Surprise Algorithms
     for algo in algorithms:
         algo_name = algo.__name__
@@ -87,9 +90,6 @@ if __name__ == '__main__':
             benchmark_results['Time'].append(cv_time)
         except Exception as e:
             print('Exception : ', e)
-
-    print("--- Surprise results ---")
-    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)

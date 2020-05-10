@@ -46,23 +46,6 @@ if __name__ == '__main__':
         'Time': []
     }
 
-    # Evaluate Surprise Algorithms
-    for algo in algorithms:
-        start_time = time.time()
-        algo_name = algo.__name__
-
-        print("Running algorithm : %s" % algo_name)
-
-        cv_results = cross_validate(algo(), data, ['rmse', 'mae'])
-        cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-        mean_rmse = '{:.4f}'.format(np.mean(cv_results['test_rmse']))
-        mean_mae = '{:.4f}'.format(np.mean(cv_results['test_mae']))
-
-        benchmark_results['Algorithm'].append(algo_name)
-        benchmark_results['RMSE'].append(mean_rmse)
-        benchmark_results['MAE'].append(mean_mae)
-        benchmark_results['Time'].append(cv_time)
-
     # Evaluate AutoSurprise
     start_time = time.time()
     engine = Engine(debug=False)
@@ -80,11 +63,27 @@ if __name__ == '__main__':
     print("Best score: ", best_score)
     print("All tasks: ", tasks)
 
-
     benchmark_results['Algorithm'].append('AutoSurprise')
     benchmark_results['RMSE'].append(mean_rmse)
     benchmark_results['MAE'].append(mean_mae)
     benchmark_results['Time'].append(cv_time)
+
+    # Evaluate Surprise Algorithms
+    for algo in algorithms:
+        start_time = time.time()
+        algo_name = algo.__name__
+
+        print("Running algorithm : %s" % algo_name)
+
+        cv_results = cross_validate(algo(), data, ['rmse', 'mae'])
+        cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+        mean_rmse = '{:.4f}'.format(np.mean(cv_results['test_rmse']))
+        mean_mae = '{:.4f}'.format(np.mean(cv_results['test_mae']))
+
+        benchmark_results['Algorithm'].append(algo_name)
+        benchmark_results['RMSE'].append(mean_rmse)
+        benchmark_results['MAE'].append(mean_mae)
+        benchmark_results['Time'].append(cv_time)
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)

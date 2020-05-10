@@ -38,8 +38,8 @@ SURPRISE_ALGORITHM_MAP = {
     'normal_predictor': NormalPredictor,
 }
 
-FULL_ALGO_LIST = ['svd', 'svdpp', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
-QUICK_COMPUTE_ALGO_LIST = ['svd', 'nmf', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
+FULL_ALGO_LIST = ['svd', 'svdpp', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
+QUICK_COMPUTE_ALGO_LIST = ['svd', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
 BASELINE_ALGO = 'normal_predictor'
 
 DEFAULT_TARGET_METRIC = 'test_rmse'

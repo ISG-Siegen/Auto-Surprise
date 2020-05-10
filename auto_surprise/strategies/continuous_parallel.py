@@ -1,5 +1,4 @@
-import concurrent.futures
-
+import multiprocessing
 from auto_surprise.constants import (EVALS_MULTIPLIER, MAX_WORKERS)
 from auto_surprise.trainer import Trainer
 from auto_surprise.strategies.base import StrategyBase
@@ -16,43 +15,28 @@ class ContinuousParallel(StrategyBase):
 
         print("Starting evaluation using strategy : ContinuousParallel")
 
-        tasks = {}
         max_evals = self.max_evals
-        futures = {}
+        processes = []
 
-        with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            # Run for N algorithms
+        # Run for N algorithms
+        with multiprocessing.Manager() as mp_manager:
+
+            tasks = mp_manager.dict()
+
             for algo in self.algorithms:
-                print("Starting thread with %s algorithm" % algo)
+                print("Starting process with %s algorithm" % algo)
 
                 trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, debug=self._debug)
-                futures[
-                    executor.submit(trainer.start_with_limits, max_evals, time_limit=self.time_limit)
-                ] = algo
+                p = multiprocessing.Process(target=trainer.start_with_limits, args=(max_evals, self.time_limit, tasks))
+                processes.append(p)
+                p.start()
 
-            # Load results of completed tasks
-            for future in concurrent.futures.as_completed(futures):
-                algo = futures[future]
-                hyperparams, best_trial = future.result()
+            # Wait for processes to complete
+            for process in processes:
+                process.join()
 
-                if hyperparams or best_trial:
-                    tasks[algo] = {
-                        'hyperparameters': best_trial['hyperparams'],
-                        'score': best_trial,
-                        'above_baseline': best_trial['loss'] < self.baseline_loss
-                    }
-                else:
-                    print('Cannot use algo : %s' % algo)
+            best_model = min(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
+            best_params = tasks[best_model]['score']['hyperparams']
+            best_score = tasks[best_model]['score']['loss']
 
-                    tasks[algo] = {
-                        'hyperparameters': None,
-                        'score': { 'loss': 100 },
-                        'above_baseline': False,
-                        'exception': True
-                    }
-
-        best_model = min(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
-        best_params = tasks[best_model]['hyperparameters']
-        best_score = tasks[best_model]['score']['loss']
-
-        return best_model, best_params, best_score, tasks
+            return best_model, best_params, best_score, tasks.copy()

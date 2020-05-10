@@ -25,6 +25,7 @@ sys.path.insert(1, './')
 from auto_surprise.engine import Engine
 
 if __name__ == '__main__':
+    sys.settrace
     print("Starting benchmark")
     # Surprise algorithms to evaluate
     algorithms = (SVD, SVDpp, NMF, SlopeOne, KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline, CoClustering, BaselineOnly, NormalPredictor)
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     df.columns = ['user', 'item', 'rating']
 
     reader = Reader(rating_scale=(0, 10))
-    data = Dataset.load_from_df(df, reader=reader)
+    data = Dataset.load_from_df(df.sample(n=100000, random_state=134), reader=reader)
     del(df)
 
     benchmark_results = {
@@ -46,7 +47,7 @@ if __name__ == '__main__':
 
     # Evaluate AutoSurprise
     start_time = time.time()
-    time_limt = 518400 # Run for 6 days
+    time_limt = 60 * 60 * 24 * 2 # Run for 2 days
     engine = Engine(debug=False)
     best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=10000)
 
@@ -65,6 +66,9 @@ if __name__ == '__main__':
     benchmark_results['RMSE'].append(mean_rmse)
     benchmark_results['MAE'].append(mean_mae)
     benchmark_results['Time'].append(cv_time)
+
+    print("--- AutoSurprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Evaluate Surprise Algorithms
     for algo in algorithms:
@@ -88,9 +92,6 @@ if __name__ == '__main__':
 
         except Exception as e:
             print('Exception : ', e)
-
-    print("--- Surprise results ---")
-    print(pd.DataFrame.from_dict(benchmark_results))
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)

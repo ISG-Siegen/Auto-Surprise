@@ -56,7 +56,7 @@ class Trainer(object):
 
             return False, False
 
-    def start_with_limits(self, max_evals, time_limit=None):
+    def start_with_limits(self, max_evals, time_limit, tasks):
         try:
             with limits.run_with_enforced_limits(time_limit=time_limit):
                 with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
@@ -64,24 +64,32 @@ class Trainer(object):
 
                     best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
 
+                    tasks[self._algo_name] = {
+                        'score': best_trial,
+                    }
+
         except TimeoutException as e:
             # Handle timeout when enforced cpu time limit is reached
             trials = self.algo.trials
 
             if trials.results:
                 best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+                tasks[self._algo_name] = {
+                    'score': best_trial,
+                }
             else:
                 best_trial = False
-
-            best = False
+                tasks[self._algo_name] = {
+                    'score': { 'loss': 100, 'hyperparams': None },
+                }
 
         except Exception as e:
             print(traceback.format_exc())
-            
+
             if self._debug:
                 raise
 
-            best = False
-            best_trial = False
-
-        return best, best_trial
+            tasks[self._algo_name] = {
+                'score': { 'loss': 100, 'hyperparams': None },
+                'exception': True
+            }
