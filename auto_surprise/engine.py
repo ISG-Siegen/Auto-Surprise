@@ -1,3 +1,4 @@
+import os
 import pathlib
 
 from auto_surprise.constants import (
@@ -49,8 +50,10 @@ class Engine(object):
 
         # Determine baseline value from random normal predictor
         with BackendContextManager(self._current_path) as tmp_dir:
+            print("Available CPUs: {0}".format(os.cpu_count()))
             baseline_trainer = Trainer(tmp_dir, algo=BASELINE_ALGO, data=data, target_metric=target_metric, debug=self._debug)
             baseline_loss = baseline_trainer.start(1)[1]['loss']
+            print("Baseline loss : {0}".format(baseline_loss))
 
             algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
 

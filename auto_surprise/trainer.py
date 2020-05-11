@@ -1,3 +1,4 @@
+import traceback
 from surprise.model_selection import cross_validate
 
 # import algorithms
@@ -27,14 +28,15 @@ class Trainer(object):
         """
         self._debug = debug
         self._tmp_dir = tmp_dir
-        self._algo_name = ALGORITHM_MAP[algo]
+        self._algo_name = algo
+        self._algo_class = ALGORITHM_MAP[algo]
         # Dynamically instantiate algorithm
-        self.algo = getattr(sys.modules[__name__], self._algo_name)(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
+        self.algo = getattr(sys.modules[__name__], self._algo_class)(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
     def start(self, max_evals):
 
         try:
-            with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+            with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
                 self.algo.set_result_logger(result_logger)
 
                 best, trials = self.algo.best_hyperparams(max_evals=max_evals)
@@ -49,19 +51,23 @@ class Trainer(object):
             return best, best_trial
         except Exception as e:
             print('Exception : ', e)
-
+            print(traceback.format_exc())
             if self._debug:
                 raise
 
             return False, False
 
-    def start_with_limits(self, max_evals, time_limit=None):
+    def start_with_limits(self, max_evals, time_limit, tasks):
         try:
             with limits.run_with_enforced_limits(time_limit=time_limit):
-                with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+                with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
                     self.algo.set_result_logger(result_logger)
 
                     best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
+
+                    tasks[self._algo_name] = {
+                        'score': best_trial,
+                    }
 
         except TimeoutException as e:
             # Handle timeout when enforced cpu time limit is reached
@@ -69,18 +75,22 @@ class Trainer(object):
 
             if trials.results:
                 best_trial = sorted(trials.results, key=lambda x: x['loss'], reverse=False)[0]
+                tasks[self._algo_name] = {
+                    'score': best_trial,
+                }
             else:
                 best_trial = False
-
-            best = False
+                tasks[self._algo_name] = {
+                    'score': { 'loss': 100, 'hyperparams': None },
+                }
 
         except Exception as e:
-            print('Exception : ', e)
+            print(traceback.format_exc())
 
             if self._debug:
                 raise
 
-            best = False
-            best_trial = False
-
-        return best, best_trial
+            tasks[self._algo_name] = {
+                'score': { 'loss': 100, 'hyperparams': None },
+                'exception': True
+            }

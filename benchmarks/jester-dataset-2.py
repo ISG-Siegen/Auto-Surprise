@@ -4,6 +4,7 @@ from surprise import NormalPredictor
 from surprise import BaselineOnly
 from surprise import KNNBasic
 from surprise import KNNWithMeans
+from surprise import KNNWithZScore
 from surprise import KNNBaseline
 from surprise import SVD
 from surprise import SVDpp
@@ -41,37 +42,17 @@ if __name__ == '__main__':
         'Time': []
     }
 
-    # Evaluate Surprise Algorithms
-    for algo in algorithms:
-        algo_name = algo.__name__
-
-        print("Running algorithm : %s" % algo_name)
-
-        try:
-            start_time = time.time()
-
-            cv_results = cross_validate(algo(), data, ['rmse', 'mae'])
-
-            cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
-            mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
-            mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
-
-            benchmark_results['Algorithm'].append(algo_name)
-            benchmark_results['RMSE'].append(mean_rmse)
-            benchmark_results['MAE'].append(mean_mae)
-            benchmark_results['Time'].append(cv_time)
-        except Exception as e:
-            print('Exception : ', e)
 
     # Evaluate AutoSurprise
     start_time = time.time()
     engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=3600, max_evals=500)
+    time_limt = 691200 # Run for 8 days
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000)
 
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
     cv_results = cross_validate(engine.build_model(best_model, best_params), data, ['rmse', 'mae'])
-    mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
-    mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
+    mean_rmse = '{:.4f}'.format(np.mean(cv_results['test_rmse']))
+    mean_mae = '{:.4f}'.format(np.mean(cv_results['test_mae']))
 
     print("--------- Done ----------")
     print("Best model: ", best_model)
@@ -84,6 +65,31 @@ if __name__ == '__main__':
     benchmark_results['RMSE'].append(mean_rmse)
     benchmark_results['MAE'].append(mean_mae)
     benchmark_results['Time'].append(cv_time)
+
+    print("--- AutoSurprise results ---")
+    print(pd.DataFrame.from_dict(benchmark_results))
+
+    # Evaluate Surprise Algorithms
+    for algo in algorithms:
+        algo_name = algo.__name__
+
+        print("Running algorithm : %s" % algo_name)
+
+        try:
+            start_time = time.time()
+
+            cv_results = cross_validate(algo(), data, ['rmse', 'mae'], cv=3)
+
+            cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+            mean_rmse = '{:.3f}'.format(np.mean(cv_results['test_rmse']))
+            mean_mae = '{:.3f}'.format(np.mean(cv_results['test_mae']))
+
+            benchmark_results['Algorithm'].append(algo_name)
+            benchmark_results['RMSE'].append(mean_rmse)
+            benchmark_results['MAE'].append(mean_mae)
+            benchmark_results['Time'].append(cv_time)
+        except Exception as e:
+            print('Exception : ', e)
 
     # Load results to csv
     results = pd.DataFrame.from_dict(benchmark_results)
