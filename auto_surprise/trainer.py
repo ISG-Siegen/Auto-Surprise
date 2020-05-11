@@ -28,14 +28,15 @@ class Trainer(object):
         """
         self._debug = debug
         self._tmp_dir = tmp_dir
-        self._algo_name = ALGORITHM_MAP[algo]
+        self._algo_name = algo
+        self._algo_class = ALGORITHM_MAP[algo]
         # Dynamically instantiate algorithm
-        self.algo = getattr(sys.modules[__name__], self._algo_name)(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
+        self.algo = getattr(sys.modules[__name__], self._algo_class)(data=data, metric=target_metric, cv_n_jobs=CV_N_JOBS, debug=debug)
 
     def start(self, max_evals):
 
         try:
-            with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+            with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
                 self.algo.set_result_logger(result_logger)
 
                 best, trials = self.algo.best_hyperparams(max_evals=max_evals)
@@ -59,7 +60,7 @@ class Trainer(object):
     def start_with_limits(self, max_evals, time_limit, tasks):
         try:
             with limits.run_with_enforced_limits(time_limit=time_limit):
-                with ResultLoggingManager(self._tmp_dir, self._algo_name) as result_logger:
+                with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
                     self.algo.set_result_logger(result_logger)
 
                     best, best_trial = self.algo.best_hyperparams(max_evals=max_evals)
