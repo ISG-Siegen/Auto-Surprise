@@ -9,6 +9,8 @@ from surprise import SlopeOne
 from surprise import CoClustering
 from surprise import NormalPredictor
 from surprise import BaselineOnly
+from hyperopt import tpe
+### Algorithm maps
 
 ALGORITHM_MAP = {
     'svd': 'AutoSurpriseSVD',
@@ -42,6 +44,8 @@ FULL_ALGO_LIST = ['svd', 'svdpp', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_
 QUICK_COMPUTE_ALGO_LIST = ['svd', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']
 BASELINE_ALGO = 'normal_predictor'
 
+### Metrics
+
 DEFAULT_TARGET_METRIC = 'test_rmse'
 
 AVAILABLE_METRICS = [
@@ -56,8 +60,10 @@ ACCURACY_METRICS = [
     'MSE',
 ]
 
+### Run params
+
 DEFAULT_MAX_EVALS = 10
 EVALS_MULTIPLIER = 5
 MAX_WORKERS = None
-
+DEFAULT_HPO_ALGO = tpe.suggest
 CV_N_JOBS = 1

@@ -2,7 +2,7 @@ import time
 import datetime
 import os
 import sys
-
+import hyperopt
 from surprise import Dataset
 from surprise import Reader
 
@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     # Run auto surprise
     start_time = time.time()
-    engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=180, max_evals=100)
+    engine = Engine(debug=True)
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=180, max_evals=100, hpo_algo=hyperopt.rand.suggest)
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
 
     print("--------- Done ----------")
