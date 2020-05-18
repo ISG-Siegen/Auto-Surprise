@@ -5,7 +5,7 @@ from auto_surprise.constants import (
     DEFAULT_TARGET_METRIC, DEFAULT_MAX_EVALS,
     FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST,
     BASELINE_ALGO, EVALS_MULTIPLIER,
-    SURPRISE_ALGORITHM_MAP
+    SURPRISE_ALGORITHM_MAP, DEFAULT_HPO_ALGO
 )
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
@@ -29,6 +29,7 @@ class Engine(object):
         max_evals=DEFAULT_MAX_EVALS,
         quick_compute=False,
         cpu_time_limit=None,
+        hpo_algo=DEFAULT_HPO_ALGO,
         strategy="continuos_parallel"
     ):
         """
@@ -67,6 +68,7 @@ class Engine(object):
                     tmp_dir,
                     max_evals=max_evals,
                     time_limit=cpu_time_limit,
+                    hpo_algo=hpo_algo,
                     debug=self._debug
                 )
             else:
@@ -76,6 +78,7 @@ class Engine(object):
                     target_metric,
                     baseline_loss,
                     tmp_dir,
+                    hpo_algo=hpo_algo,
                     debug=self._debug
                 )
 

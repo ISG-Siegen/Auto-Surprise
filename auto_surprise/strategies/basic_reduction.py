@@ -29,7 +29,7 @@ class BasicReduction(StrategyBase):
                 for algo in self.algorithms:
                     print("Starting thread with %s algorithm" % algo)
 
-                    trainer = Trainer(algo=algo, data=self.data, target_metric=self.target_metric, debug=self._debug)
+                    trainer = Trainer(algo=algo, data=self.data, target_metric=self.target_metric, hpo_algo=self.hpo_algo, debug=self._debug)
                     futures[executor.submit(trainer.start, max_evals)] = algo
 
                 # Load results of completed tasks

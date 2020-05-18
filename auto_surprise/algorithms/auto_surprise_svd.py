@@ -17,19 +17,19 @@ class AutoSurpriseSVD(AlgorithmBase):
     def _objective(self, params):
         loss = self._hyperopt(params)
         self._result_logger.append_results(loss)
-        
+
         return {
             'loss': loss,
             'status': STATUS_OK,
             'hyperparams': params
         }
 
-    def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
+    def best_hyperparams(self, max_evals):
         best = fmin(
             self._objective,
             SVD_DEFAULT_SPACE,
-            algo=tpe.suggest,
+            algo=self._hpo_algo,
             max_evals=max_evals,
-            trials=self.trials
+            trials=self.trials,
         )
         return best, self.trials

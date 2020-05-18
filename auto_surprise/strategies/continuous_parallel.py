@@ -26,7 +26,7 @@ class ContinuousParallel(StrategyBase):
             for algo in self.algorithms:
                 print("Starting process with %s algorithm" % algo)
 
-                trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, debug=self._debug)
+                trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, hpo_algo=self.hpo_algo, debug=self._debug)
                 p = multiprocessing.Process(target=trainer.start_with_limits, args=(max_evals, self.time_limit, tasks))
                 processes.append(p)
                 p.start()

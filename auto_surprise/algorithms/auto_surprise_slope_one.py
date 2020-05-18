@@ -16,14 +16,14 @@ class AutoSurpriseSlopeOne(AlgorithmBase):
     def _objective(self):
         loss = self._hyperopt()
         self._result_logger.append_results(loss)
-        
+
         return {
             'loss': loss,
             'status': STATUS_OK,
             'hyperparams': None
         }
 
-    def best_hyperparams(self, max_evals=DEFAULT_MAX_EVALS):
+    def best_hyperparams(self, max_evals):
         best = self._objective()
         # No parameters used
         return None, best
