@@ -1,15 +1,20 @@
 """
 Spaces defined for the algorithms to user
+It might be a good idea to experiment with some of the distributions here
 """
+
 from math import log
 from hyperopt import hp
+from hyperopt.pyll.base import scope
 
 LR_LOG_LOWER = log(0.0001)
 LR_LOG_UPPER = log(0.1)
 
+# NOTE: Do not use keyword arguments for hyperopt distributions. It causes a crash when using ATPE 
+
 SVD_DEFAULT_SPACE = {
-    'n_factors': hp.choice('n_factors', range(1, 500)),
-    'n_epochs': hp.choice('n_epochs', range(1, 200)),
+    'n_factors': scope.int(hp.quniform('n_factors', 1, 200, 1)),
+    'n_epochs': scope.int(hp.quniform('n_epochs', 1, 200, 1)),
     'lr_bu': hp.loguniform('lr_bu', LR_LOG_LOWER, LR_LOG_UPPER),
     'lr_bi': hp.loguniform('lr_bi', LR_LOG_LOWER, LR_LOG_UPPER),
     'lr_pu': hp.loguniform('lr_pu', LR_LOG_LOWER, LR_LOG_UPPER),
@@ -29,8 +34,8 @@ SVDPP_SPACE = {
 SIMILARITY_OPTIONS_SPACE = {
     'name': hp.choice('name', ['cosine', 'msd', 'pearson', 'pearson_baseline']),
     'user_based': hp.choice('user_based', [False, True]),
-    'min_support': hp.choice('min_support', range(1, 100)),
-    # 'shrinkage': hp.choice('shrinkage', range(1, 300))
+    'min_support': scope.int(hp.quniform('min_support', 1, 100, 1)),
+    'shrinkage': scope.int(hp.quniform('shrinkage', 1, 300, 1))
 }
 
 BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
@@ -38,7 +43,7 @@ BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
         'method': 'als',
         'reg_i': hp.uniform('reg_i', 1, 100),
         'reg_u': hp.uniform('reg_u', 1, 100),
-        'n_epochs': hp.choice('n_epochs', range(5, 200)),
+        'n_epochs': scope.int(hp.quniform('n_epochs', 5, 200, 1)),
     },
     {
         'method': 'sgd',
@@ -48,8 +53,8 @@ BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
 ])
 
 KNN_DEFAULT_SPACE = {
-    'k': hp.choice('k', range(1, 500)),
-    'min_k': hp.choice('min_k', range(1, 30)),
+    'k': scope.int(hp.quniform('k', 1, 500, 1)),
+    'min_k': scope.int(hp.quniform('min_k', 1, 50, 1)),
     'sim_options': SIMILARITY_OPTIONS_SPACE
 }
 
@@ -59,8 +64,8 @@ KNN_BASELINE_SPACE = {
 }
 
 NMF_DEFAULT_SPACE = {
-    'n_factors': hp.choice('n_factors', range(1, 500)),
-    'n_epochs': hp.choice('n_epochs', range(5, 200)),
+    'n_factors': scope.int(hp.quniform('n_factors', 1, 500, 1)),
+    'n_epochs': scope.int(hp.quniform('n_epochs', 5, 200, 1)),
     'lr_bu': hp.loguniform('lr_bu', LR_LOG_LOWER, LR_LOG_UPPER),
     'lr_bi': hp.loguniform('lr_bi', LR_LOG_LOWER, LR_LOG_UPPER),
     'reg_bu': hp.loguniform('reg_bu', LR_LOG_LOWER, LR_LOG_UPPER),
@@ -71,7 +76,7 @@ NMF_DEFAULT_SPACE = {
 }
 
 CO_CLUSTERING_DEFAULT_SPACE = {
-    'n_cltr_u': hp.choice('n_cltr_u', range(1, 1000)),
-    'n_cltr_i': hp.choice('n_cltr_i', range(1, 100)),
-    'n_epochs': hp.choice('n_epochs', range(5, 200)),
+    'n_cltr_u': scope.int(hp.quniform('n_cltr_u', 1, 1000, 1)),
+    'n_cltr_i': scope.int(hp.quniform('n_cltr_i', 1, 100, 1)),
+    'n_epochs': scope.int(hp.quniform('n_epochs', 5, 200, 1)),
 }
