@@ -8,7 +8,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-
+import hyperopt
 from surprise import Dataset
 from surprise import Reader
 from surprise import NormalPredictor
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     start_time = time.time()
     engine = Engine(debug=False)
     time_limt = 43200 # Run for 12 hours
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000)
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000, hpo_algo=hyperopt.atpe.suggest)
 
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
     cv_results = cross_validate(engine.build_model(best_model, best_params), data, ['rmse', 'mae'])

@@ -12,7 +12,7 @@ from surprise import NMF
 from surprise import SlopeOne
 from surprise import CoClustering
 from surprise.model_selection import cross_validate
-
+import hyperopt
 import time
 import datetime
 import os
@@ -47,9 +47,9 @@ if __name__ == '__main__':
 
     # Evaluate AutoSurprise
     start_time = time.time()
-    time_limt = 60 * 60 * 24 * 2 # Run for 2 days
+    time_limt = 60 * 60 * 12 # Run for 12 hours
     engine = Engine(debug=False)
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=10000)
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=10000, hpo_algo=hyperopt.atpe.suggest)
 
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
     cv_results = cross_validate(engine.build_model(best_model, best_params), data, ['rmse', 'mae'])
