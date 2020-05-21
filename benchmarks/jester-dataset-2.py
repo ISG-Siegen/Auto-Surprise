@@ -12,7 +12,7 @@ from surprise import NMF
 from surprise import SlopeOne
 from surprise import CoClustering
 from surprise.model_selection import cross_validate
-
+import hyperopt
 import time
 import datetime
 import os
@@ -30,10 +30,12 @@ if __name__ == '__main__':
     algorithms = (SVD, SVDpp, NMF, SlopeOne, KNNBasic, KNNWithMeans, KNNWithZScore, KNNBaseline, CoClustering, BaselineOnly, NormalPredictor)
 
     # Load Jester dataset 2
-    file_path = os.path.expanduser('../datasets/jester_dataset_2/jester_ratings.dat')
-    reader = Reader(line_format='user item rating', rating_scale=(-10, 10), sep="\t\t")
+    df = pd.read_csv('../datasets/jester_dataset_2/jester_ratings.dat', sep="\t\t", error_bad_lines=False, encoding="latin-1")
+    df.columns = ['user', 'item', 'rating']
 
-    data = Dataset.load_from_file(file_path, reader=reader)
+    reader = Reader(rating_scale=(-10, 10))
+    data = Dataset.load_from_df(df.sample(n=100000, random_state=134), reader=reader)
+    del(df)
 
     benchmark_results = {
         'Algorithm': [],
@@ -46,8 +48,8 @@ if __name__ == '__main__':
     # Evaluate AutoSurprise
     start_time = time.time()
     engine = Engine(debug=False)
-    time_limt = 691200 # Run for 8 days
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', quick_compute=False, cpu_time_limit=time_limt, max_evals=1000000)
+    time_limt = 60 * 60 * 2 # Run for 2 hours
+    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=time_limt, max_evals=1000000, hpo_algo=hyperopt.tpe.suggest)
 
     cv_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
     cv_results = cross_validate(engine.build_model(best_model, best_params), data, ['rmse', 'mae'])
