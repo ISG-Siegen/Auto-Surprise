@@ -45,3 +45,14 @@ In the above example, we first initialize the `Engine`. We then run `engine.trai
 - `target_metric` : The metric we seek to minimize. Available options are `test_rmse` and `test_mae`.
 - `cpu_time_limit` : The time limit we want to train. This is in seconds. For datasets like Movielens 100k, 1 hour is sufficient. But you may want to increase this based on the size of your dataset
 - `max_evals`: The maximum number of evaluations each algorithm gets for hyper parameter optimization.
+- `hpo_algo`: Auto-Surprise uses Hyperopt for hyperparameter tuning. By default, it's set to use TPE, but you can change this to any algorithm supported by hyperopt, such as Adaptive TPE or Random search. 
+
+```python
+# Example for setting the HPO algorithm to adaptive TPE
+import hyperopt
+
+...
+
+engine = Engine(debug=False)
+best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100, hpo_algo=hyperopt.atpe.suggest)
+```
