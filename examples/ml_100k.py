@@ -2,13 +2,11 @@ import time
 import datetime
 import os
 import sys
-
-sys.path.insert(1, './')
-
+from surprise import Dataset
 from auto_surprise.engine import Engine
 
 if __name__ == '__main__':
-    
+
     data = Dataset.load_builtin('ml-100k')
 
     # Run auto surprise

@@ -1,21 +1,26 @@
 import setuptools
 
-# default required packages
-install_requires = ['hyperopt', 'scikit-surprise']
+install_requires = [
+    "hyperopt",
+    "lightgbm",
+    "numpy",
+    "scikit-learn==0.22.0",
+    "scikit-surprise"
+]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="auto-surprise",
-    packages="auto-surprise",
-    version="0.0.1",
+    version="0.1.0",
     author="Rohan Anand",
     author_email="anandr@tcd.ie",
-    description="A python package that automates machine learning for the recommender system library Surprise",
+    description="A python package that automates algorithm selection and hyperparameter tuning for the recommender system library Surprise",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/thededlier/auto-surprise",
+    url="https://github.com/BeelGroup/Auto-Surprise",
+    download_url="https://github.com/BeelGroup/Auto-Surprise/archive/v0.1.0.tar.gz",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

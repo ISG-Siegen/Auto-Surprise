@@ -88,6 +88,7 @@ class Trainer(object):
                     }
 
             except Exception as e:
+                print("Exception for algo ", self._algo_name)
                 print(traceback.format_exc())
 
                 if self._debug:
