@@ -1,4 +1,4 @@
-# AutoSurprise
+# Auto-Surprise
 
 Auto-Surprise is built as a wrapper around the Python [Surprise](https://surprise.readthedocs.io/en/stable/index.html) recommender-system library. It automates algorithm selection and hyper parameter optimization in a highly parallelized manner.
 
@@ -6,18 +6,10 @@ AutoSurprise is currently in development.
 
 # Setup
 
-To setup AutoSurprise, you will require Python3 installed on a linux system.
-
-To install the required packages
+To setup Auto-Surprise, you will require Python3 installed on a linux system. Auto-Surprise can be installed using pip
 
 ```
-pip install -r requirements.txt
-```
-
-You can then test that the install works by running the example program
-
-```
-python3 -u examples/ml-100k.py
+pip install auto-surprise
 ```
 
 # Usage
