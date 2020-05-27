@@ -66,7 +66,8 @@ class Trainer(object):
 
                     best, best_trial = self.algo.best_hyperparams(max_evals)
 
-                    best_trial = sorted(self.algo.trials.results, key=lambda x: x['loss'], reverse=False)[0]
+                    if self.algo.trials.results:
+                        best_trial = sorted(self.algo.trials.results, key=lambda x: x['loss'], reverse=False)[0]
 
                     tasks[self._algo_name] = {
                         'score': best_trial,
