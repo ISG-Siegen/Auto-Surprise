@@ -10,7 +10,7 @@ from hyperopt.pyll.base import scope
 LR_LOG_LOWER = log(0.0001)
 LR_LOG_UPPER = log(0.1)
 
-# NOTE: Do not use keyword arguments for hyperopt distributions. It causes a crash when using ATPE 
+# NOTE: Do not use keyword arguments for hyperopt distributions. It causes a crash when using ATPE
 
 SVD_DEFAULT_SPACE = {
     'n_factors': scope.int(hp.quniform('n_factors', 1, 200, 1)),
@@ -31,6 +31,8 @@ SVDPP_SPACE = {
     'reg_yj': hp.loguniform('reg_yj', LR_LOG_LOWER, LR_LOG_UPPER)
 }
 
+# TODO: Shrinkage param is only used when pearson_baseline is selected. It would
+# be great if we could conditionally optimize if pearson_baseline is used
 SIMILARITY_OPTIONS_SPACE = {
     'name': hp.choice('name', ['cosine', 'msd', 'pearson', 'pearson_baseline']),
     'user_based': hp.choice('user_based', [False, True]),
@@ -51,6 +53,10 @@ BSL_OPTIONS_SPACE = hp.choice('bsl_options', [
         'learning_rate': hp.loguniform('learning_rate', LR_LOG_LOWER, LR_LOG_UPPER)
     }
 ])
+
+BASELINE_ONLY_SPACE = {
+    'bsl_options': BSL_OPTIONS_SPACE
+}
 
 KNN_DEFAULT_SPACE = {
     'k': scope.int(hp.quniform('k', 1, 500, 1)),
