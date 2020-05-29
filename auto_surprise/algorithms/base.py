@@ -1,4 +1,4 @@
-from auto_surprise.constants import DEFAULT_TARGET_METRIC, CV_N_JOBS, DEFAULT_HPO_ALGO DEFAULT_CV_ITERS
+from auto_surprise.constants import DEFAULT_TARGET_METRIC, CV_N_JOBS, DEFAULT_HPO_ALGO, DEFAULT_CV_ITERS
 from hyperopt import Trials
 
 class AlgorithmBase(object):
