@@ -13,7 +13,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="auto-surprise",
-    version="0.1.0",
+    version="0.1.1",
     author="Rohan Anand",
     author_email="anandr@tcd.ie",
     description="A python package that automates algorithm selection and hyperparameter tuning for the recommender system library Surprise",
