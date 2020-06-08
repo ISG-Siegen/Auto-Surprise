@@ -1,5 +1,7 @@
 # Auto-Surprise
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/BeelGroup/Auto-Surprise.svg) ![PyPI](https://img.shields.io/pypi/v/Auto-Surprise.svg) ![PyPI - Downloads](https://img.shields.io/pypi/dm/Auto-Surprise.svg)
+
 Auto-Surprise is built as a wrapper around the Python [Surprise](https://surprise.readthedocs.io/en/stable/index.html) recommender-system library. It automates algorithm selection and hyper parameter optimization in a highly parallelized manner.
 
 AutoSurprise is currently in development.
@@ -21,14 +23,13 @@ from surprise import Dataset
 from auto_surprise.engine import Engine
 
 # Load the dataset
-if __name__ == '__main__':
-    data = Dataset.load_builtin('ml-100k')
+data = Dataset.load_builtin('ml-100k')
 
-    # Intitialize auto surprise engine
-    engine = Engine(debug=False)
+# Intitialize auto surprise engine
+engine = Engine(debug=False)
 
-    # Start the trainer
-    best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100)
+# Start the trainer
+best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100)
 ```
 
 In the above example, we first initialize the `Engine`. We then run `engine.train()` to begin training our model. To train the model we need to pass the following
