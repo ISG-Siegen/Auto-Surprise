@@ -4,7 +4,7 @@ from auto_surprise.exceptions import ValidationError
 
 import utils as test_utils
 
-class ValidationUtilTest(unittest.TestCase):
+class TestValidationUtil(unittest.TestCase):
     def test_validate_target_metric(self):
         """
         Test that a valid target metric is selected
