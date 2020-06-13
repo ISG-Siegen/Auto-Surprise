@@ -15,7 +15,7 @@ class AutoSurpriseNMF(AlgorithmBase):
 
     def _objective(self, params):
         loss = self._hyperopt(params)
-        self._result_logger.append_results(loss)
+        self._result_logger.append_results(loss, params)
 
         return {
             'loss': loss,
