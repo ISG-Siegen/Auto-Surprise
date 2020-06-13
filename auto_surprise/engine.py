@@ -1,4 +1,5 @@
 import os
+import logging
 import pathlib
 
 from auto_surprise.constants import (
@@ -19,6 +20,9 @@ class Engine(object):
         """
         Initialize new engine
         """
+        logging.basicConfig(level=logging.INFO)
+        self.__logger = logging.getLogger(__name__)
+
         self._debug = debug
         self._current_path = pathlib.Path().absolute()
 
@@ -41,20 +45,19 @@ class Engine(object):
             validation_util.validate_target_metric(target_metric)
             validation_util.validate_dataset(data)
             validation_util.validate_max_evals(max_evals)
-        except ValidationError as e:
+        except ValidationError as err:
             """
             Catch validation errors
             """
-            print(e.message)
-            if self._debug:
-                raise
+            logging.critical(err.message)
+            raise err
 
         # Determine baseline value from random normal predictor
         with BackendContextManager(self._current_path) as tmp_dir:
-            print("Available CPUs: {0}".format(os.cpu_count()))
+            self.__logger.info("Available CPUs: {0}".format(os.cpu_count()))
             baseline_trainer = Trainer(tmp_dir, algo=BASELINE_ALGO, data=data, target_metric=target_metric, debug=self._debug)
             baseline_loss = baseline_trainer.start(1)[1]['loss']
-            print("Baseline loss : {0}".format(baseline_loss))
+            self.__logger.info("Baseline loss : {0}".format(baseline_loss))
 
             algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
 
@@ -66,10 +69,10 @@ class Engine(object):
                     target_metric,
                     baseline_loss,
                     tmp_dir,
-                    max_evals=max_evals,
-                    time_limit=cpu_time_limit,
-                    hpo_algo=hpo_algo,
-                    debug=self._debug
+                    max_evals,
+                    cpu_time_limit,
+                    hpo_algo,
+                    self._debug
                 )
             else:
                 strategy = BasicReduction(

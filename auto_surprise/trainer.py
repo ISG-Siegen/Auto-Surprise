@@ -1,5 +1,6 @@
 import sys
 import traceback
+import logging
 from surprise.model_selection import cross_validate
 
 # import algorithms
@@ -25,6 +26,7 @@ class Trainer(object):
         """
         Initialize new trainer
         """
+        self.__logger = logging.getLogger(__name__)
         self._debug = debug
         self._tmp_dir = tmp_dir
         self._algo_name = algo
@@ -49,8 +51,8 @@ class Trainer(object):
 
             return best, best_trial
         except Exception as e:
-            print('Exception : ', e)
-            print(traceback.format_exc())
+            self.__logger.ERROR('Exception : ', e)
+            self.__logger.ERROR(traceback.format_exc())
             if self._debug:
                 raise
 
@@ -73,7 +75,7 @@ class Trainer(object):
                         'score': best_trial,
                     }
 
-            except TimeoutException as e:
+            except TimeoutException:
                 # Handle timeout when enforced cpu time limit is reached
                 trials = self.algo.trials
 
@@ -88,9 +90,9 @@ class Trainer(object):
                         'score': { 'loss': 100, 'hyperparams': None },
                     }
 
-            except Exception as e:
-                print("Exception for algo ", self._algo_name)
-                print(traceback.format_exc())
+            except Exception:
+                self.__logger.error("Exception for algo {0}".format(self._algo_name))
+                self.__logger.error(traceback.format_exc())
 
                 if self._debug:
                     raise
