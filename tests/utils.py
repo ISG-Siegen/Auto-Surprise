@@ -8,7 +8,7 @@ def load_test_dataset():
     """
     Load a sample of the ml_100k dataset
     """
-    file_path = os.path.expanduser('./u1_ml_100k_test')
+    file_path = os.path.expanduser('./tests/u1_ml_100k_test')
     reader = Reader(line_format='user item rating timestamp', sep=',', rating_scale=(1, 5))
 
     return Dataset.load_from_file(file_path, reader=reader)

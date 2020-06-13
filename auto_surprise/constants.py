@@ -46,18 +46,18 @@ BASELINE_ALGO = 'normal_predictor'
 
 ### Metrics
 
-DEFAULT_TARGET_METRIC = 'test_rmse'
+DEFAULT_TARGET_METRIC = "test_rmse"
 
 AVAILABLE_METRICS = [
-    'test_rmse',
-    'test_mae',
-    'test_mse',
+    "test_rmse",
+    "test_mae",
+    "test_mse",
 ]
 
 ACCURACY_METRICS = [
-    'RMSE',
-    'MAE',
-    'MSE',
+    "RMSE",
+    "MAE",
+    "MSE",
 ]
 
 ### Run params

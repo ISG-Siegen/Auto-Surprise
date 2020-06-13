@@ -1,3 +1,4 @@
+import logging
 import multiprocessing
 from auto_surprise.constants import (EVALS_MULTIPLIER, MAX_WORKERS)
 from auto_surprise.trainer import Trainer
@@ -7,13 +8,16 @@ class ContinuousParallel(StrategyBase):
     """
     Executes all alogrithms in parallel until time limit exceeded or max evals reached.
     """
+    def __init__(self, *args):
+        self.__logger = logging.getLogger(__name__)
+        super().__init__(*args)
 
     def evaluate(self):
         """
         Evaluate performance of algorithms
         """
 
-        print("Starting evaluation using strategy : ContinuousParallel")
+        self.__logger.info("Starting evaluation using strategy : ContinuousParallel")
 
         max_evals = self.max_evals
         processes = []
@@ -24,7 +28,7 @@ class ContinuousParallel(StrategyBase):
             tasks = mp_manager.dict()
 
             for algo in self.algorithms:
-                print("Starting process with %s algorithm" % algo)
+                self.__logger.debug("Starting process with %s algorithm" % algo)
 
                 trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, hpo_algo=self.hpo_algo, debug=self._debug)
                 p = multiprocessing.Process(target=trainer.start_with_limits, args=(max_evals, self.time_limit, tasks))

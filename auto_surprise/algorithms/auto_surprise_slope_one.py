@@ -15,7 +15,7 @@ class AutoSurpriseSlopeOne(AlgorithmBase):
 
     def _objective(self):
         loss = self._hyperopt()
-        self._result_logger.append_results(loss)
+        self._result_logger.append_results(loss, None)
 
         return {
             'loss': loss,
