@@ -1,6 +1,6 @@
 # Auto-Surprise
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/BeelGroup/Auto-Surprise.svg) ![PyPI](https://img.shields.io/pypi/v/Auto-Surprise.svg) ![PyPI - Downloads](https://img.shields.io/pypi/dm/Auto-Surprise.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/BeelGroup/Auto-Surprise.svg) ![PyPI](https://img.shields.io/pypi/v/Auto-Surprise.svg) ![PyPI - Downloads](https://img.shields.io/pypi/dm/Auto-Surprise.svg) ![Codecov](https://img.shields.io/codecov/c/github/BeelGroup/Auto-Surprise.svg) ![Travis (.org)](https://img.shields.io/travis/BeelGroup/Auto-Surprise.svg)
 
 Auto-Surprise is built as a wrapper around the Python [Surprise](https://surprise.readthedocs.io/en/stable/index.html) recommender-system library. It automates algorithm selection and hyper parameter optimization in a highly parallelized manner.
 
