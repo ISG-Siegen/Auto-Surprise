@@ -2,7 +2,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/BeelGroup/Auto-Surprise.svg) ![PyPI](https://img.shields.io/pypi/v/Auto-Surprise.svg) ![PyPI - Downloads](https://img.shields.io/pypi/dm/Auto-Surprise.svg) ![Codecov](https://img.shields.io/codecov/c/github/BeelGroup/Auto-Surprise.svg) ![Travis (.org)](https://img.shields.io/travis/BeelGroup/Auto-Surprise.svg)
 
-Auto-Surprise is built as a wrapper around the Python [Surprise](https://surprise.readthedocs.io/en/stable/index.html) recommender-system library. It automates algorithm selection and hyper parameter optimization in a highly parallelized manner.
+Auto-Surprise is built as a wrapper around the Python [Surprise](https://surprise.readthedocs.io/en/stable/index.html) recommender-system library. It automates algorithm selection and hyper parameter optimization in a highly parallelized manner. Full documentation is available at [Auto-Surprise ReadTheDocs](https://auto-surprise.readthedocs.io/en/latest/)
 
 AutoSurprise is currently in development.
 
@@ -29,7 +29,7 @@ data = Dataset.load_builtin('ml-100k')
 engine = Engine(debug=False)
 
 # Start the trainer
-best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100)
+best_algo, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100)
 ```
 
 In the above example, we first initialize the `Engine`. We then run `engine.train()` to begin training our model. To train the model we need to pass the following
