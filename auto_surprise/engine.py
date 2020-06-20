@@ -69,8 +69,8 @@ class Engine(object):
                     target_metric,
                     baseline_loss,
                     tmp_dir,
-                    max_evals,
                     cpu_time_limit,
+                    max_evals,
                     hpo_algo,
                     self._debug
                 )
