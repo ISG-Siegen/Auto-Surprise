@@ -10,7 +10,7 @@ def run_with_enforced_limits(time_limit=None):
     """
 
     def signal_handler(signum, frame):
-        raise TimeoutException("Timed out!")
+        raise TimeoutException("This job has timed out. The results will still be used")
 
     signal.signal(signal.SIGALRM, signal_handler)
 

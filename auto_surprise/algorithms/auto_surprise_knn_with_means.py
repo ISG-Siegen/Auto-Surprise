@@ -11,7 +11,7 @@ class AutoSurpriseKNNWithMeans(AlgorithmBase):
     """
     def _hyperopt(self, params):
         algo = KNNWithMeans(**params)
-        return cross_validate(algo, self._data, measures=ACCURACY_METRICS, cv=self._cv, n_jobs=self._cv_n_jobs, verbose=self._debug)[self._metric].mean()
+        return cross_validate(algo, self._data, measures=ACCURACY_METRICS, cv=self._cv, n_jobs=self._cv_n_jobs, verbose=self.verbose)[self._metric].mean()
 
     def _objective(self, params):
         loss = self._hyperopt(params)
@@ -29,6 +29,7 @@ class AutoSurpriseKNNWithMeans(AlgorithmBase):
             KNN_DEFAULT_SPACE,
             algo=self._hpo_algo,
             max_evals=max_evals,
-            trials=self.trials
+            trials=self.trials,
+            verbose=self.verbose,
         )
         return best, self.trials
