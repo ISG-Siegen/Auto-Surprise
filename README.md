@@ -26,7 +26,7 @@ from auto_surprise.engine import Engine
 data = Dataset.load_builtin('ml-100k')
 
 # Intitialize auto surprise engine
-engine = Engine(debug=False)
+engine = Engine(verbose=True)
 
 # Start the trainer
 best_algo, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=720, max_evals=100)
