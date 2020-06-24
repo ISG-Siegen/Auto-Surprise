@@ -22,3 +22,12 @@ class TestTrainer(unittest.TestCase):
             trainer.start_with_limits(100, 10, tasks)
             self.assertTrue(tasks["svd"])
             self.assertEqual(tasks["svd"]["exception"], False)
+
+        with self.subTest(msg="With timeout exception, but the job was not evaluated even once"):
+            tasks = {}
+            # Running SVD++ as it generally has a longer execution time. Only giving a timer for 1 second
+            trainer = Trainer(self.tmp_path, algo="svdpp", data=self.data)           
+            trainer.start_with_limits(100, 1, tasks)
+            self.assertTrue(tasks["svdpp"])
+            self.assertEqual(tasks["svdpp"]["exception"], False)
+            self.assertIsNone(tasks["svdpp"]["loss"])
