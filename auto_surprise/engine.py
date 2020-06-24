@@ -84,9 +84,14 @@ class Engine(object):
                 verbose=self.verbose,
             )
 
-            best_model, best_params, best_score, tasks = strategy.evaluate()
+            best_algo, best_params, best_score, tasks = strategy.evaluate()
 
-        return best_model, best_params, best_score, tasks
+        if self.verbose:
+            print("----Done!----")
+            print("Best algorithm: {0}".format(best_algo))
+            print("Best hyperparameters: {0}".format(best_params))
+            
+        return best_algo, best_params, best_score, tasks
 
     def build_model(self, algo_name, params):
         algo = SURPRISE_ALGORITHM_MAP[algo_name]

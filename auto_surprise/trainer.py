@@ -99,7 +99,8 @@ class Trainer(object):
                         )[0]
 
                     tasks[self._algo_name] = {
-                        "score": best_trial,
+                        **best_trial,
+                        "exception": False
                     }
 
             except TimeoutException:
@@ -110,13 +111,17 @@ class Trainer(object):
                     best_trial = sorted(
                         trials.results, key=lambda x: x["loss"], reverse=False
                     )[0]
+                    # A timeout exception is not considered an algorithm exception
                     tasks[self._algo_name] = {
-                        "score": best_trial,
+                        **best_trial,
+                        "exception": False
                     }
                 else:
                     # When no trials were completed before the job timed out
                     tasks[self._algo_name] = {
-                        "score": {"loss": None, "hyperparams": None},
+                        "loss": None, 
+                        "hyperparams": None,
+                        "exception": False,
                     }
 
             except Exception:
@@ -124,6 +129,7 @@ class Trainer(object):
                 self.__logger.error(traceback.format_exc())
 
                 tasks[self._algo_name] = {
-                    "score": {"loss": None, "hyperparams": None},
+                    "loss": None, 
+                    "hyperparams": None,
                     "exception": True,
                 }
