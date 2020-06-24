@@ -1,16 +1,18 @@
 import logging
 import multiprocessing
-from auto_surprise.constants import (EVALS_MULTIPLIER, MAX_WORKERS)
+from auto_surprise.constants import EVALS_MULTIPLIER, MAX_WORKERS
 from auto_surprise.trainer import Trainer
 from auto_surprise.strategies.base import StrategyBase
+
 
 class ContinuousParallel(StrategyBase):
     """
     Executes all alogrithms in parallel until time limit exceeded or max evals reached.
     """
-    def __init__(self, *args):
+
+    def __init__(self, *args, **kwargs):
         self.__logger = logging.getLogger(__name__)
-        super().__init__(*args)
+        super().__init__(*args, **kwargs)
 
     def evaluate(self):
         """
@@ -28,10 +30,21 @@ class ContinuousParallel(StrategyBase):
             tasks = mp_manager.dict()
 
             for algo in self.algorithms:
-                self.__logger.debug("Starting process with %s algorithm" % algo)
+                if self.verbose:
+                    print("Starting process with %s algorithm" % algo)
 
-                trainer = Trainer(self.tmp_dir, algo=algo, data=self.data, target_metric=self.target_metric, hpo_algo=self.hpo_algo, debug=self._debug)
-                p = multiprocessing.Process(target=trainer.start_with_limits, args=(max_evals, self.time_limit, tasks))
+                trainer = Trainer(
+                    self.tmp_dir,
+                    algo=algo,
+                    data=self.data,
+                    target_metric=self.target_metric,
+                    hpo_algo=self.hpo_algo,
+                    verbose=self.verbose,
+                )
+                p = multiprocessing.Process(
+                    target=trainer.start_with_limits,
+                    args=(max_evals, self.time_limit, tasks),
+                )
                 processes.append(p)
                 p.start()
 
@@ -39,8 +52,9 @@ class ContinuousParallel(StrategyBase):
             for process in processes:
                 process.join()
 
-            best_model = min(tasks.items(), key=(lambda x: x[1]['score']['loss']))[0]
-            best_params = tasks[best_model]['score']['hyperparams']
-            best_score = tasks[best_model]['score']['loss']
+            passed_jobs = {k:v for k,v in tasks.items() if v["loss"]}
+            best_algo = min(passed_jobs.items(), key=(lambda x: x[1]["loss"]))[0]
+            best_params = passed_jobs[best_algo]["hyperparams"]
+            best_score = passed_jobs[best_algo]["loss"]
 
-            return best_model, best_params, best_score, tasks.copy()
+            return best_algo, best_params, best_score, tasks.copy()

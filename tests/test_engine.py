@@ -12,8 +12,8 @@ class TestEngine(unittest.TestCase):
     def test_trainer(self):
 
         with self.subTest("Sanity - everything just works"):
-            best_model, best_params, best_score, tasks=self.engine.train(data=self.data, cpu_time_limit=60, max_evals=20)
-            self.assertTrue(best_model)
+            best_algo, best_params, best_score, tasks=self.engine.train(data=self.data, cpu_time_limit=60, max_evals=20)
+            self.assertTrue(best_algo)
             self.assertTrue(best_score)
             self.assertTrue(tasks)
 

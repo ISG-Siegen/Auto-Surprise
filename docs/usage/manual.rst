@@ -18,7 +18,7 @@ Here, we will cover in more detail the usage for Auto-Surprise. We will start wi
     data = Dataset.load_from_file(file_path, reader=reader)
 
     # Intitialize auto surprise engine
-    engine = Engine(debug=True)
+    engine = Engine(verbose=True)
 
     # Start the trainer
     best_algo, best_params, best_score, tasks = engine.train(

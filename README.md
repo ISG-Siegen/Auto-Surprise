@@ -10,8 +10,8 @@ AutoSurprise is currently in development.
 
 To setup Auto-Surprise, you will require Python3 installed on a linux system. Auto-Surprise can be installed using pip
 
-```
-pip install auto-surprise
+```bash
+$ pip install auto-surprise
 ```
 
 # Usage
@@ -46,7 +46,7 @@ import hyperopt
 
 ...
 
-engine = Engine(debug=False)
+engine = Engine(verbose=True)
 engine.train(
     data=data,
     target_metric='test_rmse',

@@ -11,7 +11,7 @@ class StrategyBase():
         time_limit=None,
         max_evals=DEFAULT_MAX_EVALS,
         hpo_algo=DEFAULT_HPO_ALGO,
-        debug=False,
+        verbose=False,
     ):
         self.algorithms = algorithms
         self.data = data
@@ -21,4 +21,4 @@ class StrategyBase():
         self.tmp_dir = temporary_directory
         self.hpo_algo = hpo_algo
         self.max_evals = max_evals
-        self._debug = debug
+        self.verbose = verbose

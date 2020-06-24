@@ -30,7 +30,7 @@ Here's a quick example of using Auto-Surprise to determine the best algorithm an
     data = Dataset.load_builtin('ml-100k')
 
     # Intitialize auto surprise engine
-    engine = Engine(debug=False)
+    engine = Engine(verbose=True)
 
     # Start the trainer
     best_algo, best_params, best_score, tasks = engine.train(

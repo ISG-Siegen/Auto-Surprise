@@ -23,7 +23,7 @@ class TestValidationUtil(unittest.TestCase):
         """
 
         self.assertRaises(ValidationError, validation_util.validate_dataset, None)
-
+        self.assertRaises(ValidationError, validation_util.validate_dataset, True)
         valid_dataset = test_utils.load_test_dataset()
         self.assertTrue(validation_util.validate_dataset(valid_dataset))
 

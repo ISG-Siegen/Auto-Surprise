@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     # Evaluate AutoSurprise
     start_time = time.time()
-    engine = Engine(debug=False)
+    engine = Engine(verbose=False)
     time_limt = 60 * 60 * 2 # Run for 2 hours
     best_model, best_params, best_score, tasks = engine.train(data=data, target_metric='test_rmse', cpu_time_limit=time_limt, max_evals=1000000, hpo_algo=hyperopt.tpe.suggest)
 

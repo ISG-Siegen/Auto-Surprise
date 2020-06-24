@@ -3,27 +3,29 @@ import logging
 import pathlib
 
 from auto_surprise.constants import (
-    DEFAULT_TARGET_METRIC, DEFAULT_MAX_EVALS,
-    FULL_ALGO_LIST, QUICK_COMPUTE_ALGO_LIST,
-    BASELINE_ALGO, EVALS_MULTIPLIER,
-    SURPRISE_ALGORITHM_MAP, DEFAULT_HPO_ALGO
+    DEFAULT_TARGET_METRIC,
+    DEFAULT_MAX_EVALS,
+    FULL_ALGO_LIST,
+    QUICK_COMPUTE_ALGO_LIST,
+    BASELINE_ALGO,
+    EVALS_MULTIPLIER,
+    SURPRISE_ALGORITHM_MAP,
+    DEFAULT_HPO_ALGO,
 )
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
 from auto_surprise.context.backend import BackendContextManager
-from auto_surprise.strategies.basic_reduction import BasicReduction
 from auto_surprise.strategies.continuous_parallel import ContinuousParallel
 import auto_surprise.validation_util as validation_util
 
+
 class Engine(object):
-    def __init__(self, debug=False):
+    def __init__(self, verbose=True):
         """
         Initialize new engine
         """
-        logging.basicConfig(level=logging.INFO)
         self.__logger = logging.getLogger(__name__)
-
-        self._debug = debug
+        self.verbose = verbose
         self._current_path = pathlib.Path().absolute()
 
     def train(
@@ -31,10 +33,8 @@ class Engine(object):
         target_metric=DEFAULT_TARGET_METRIC,
         data=None,
         max_evals=DEFAULT_MAX_EVALS,
-        quick_compute=False,
         cpu_time_limit=None,
         hpo_algo=DEFAULT_HPO_ALGO,
-        strategy="continuos_parallel"
     ):
         """
         Train and find most optimal model and hyperparameters
@@ -47,51 +47,55 @@ class Engine(object):
             validation_util.validate_max_evals(max_evals)
         except ValidationError as err:
             """
-            Catch validation errors
+            Catch validation errors. Auto-Surprise cannot run with these exceptions
             """
-            logging.critical(err.message)
+            self.__logger.critical(err.message)
             raise err
 
         # Determine baseline value from random normal predictor
         with BackendContextManager(self._current_path) as tmp_dir:
-            self.__logger.info("Available CPUs: {0}".format(os.cpu_count()))
-            baseline_trainer = Trainer(tmp_dir, algo=BASELINE_ALGO, data=data, target_metric=target_metric, debug=self._debug)
-            baseline_loss = baseline_trainer.start(1)[1]['loss']
-            self.__logger.info("Baseline loss : {0}".format(baseline_loss))
+            if self.verbose:
+                print("Available CPUs: {0}".format(os.cpu_count()))
 
-            algorithms = QUICK_COMPUTE_ALGO_LIST if quick_compute else FULL_ALGO_LIST
+            # Calculate baseline first. This can be used to early stop training of algorithms if results are not optimal
+            baseline_trainer = Trainer(
+                tmp_dir,
+                algo=BASELINE_ALGO,
+                data=data,
+                target_metric=target_metric,
+                verbose=self.verbose,
+            )
+            baseline_loss = baseline_trainer.start(1)[1]["loss"]
+            if self.verbose:
+                print("Baseline loss : {0}".format(baseline_loss))
 
-            # Select the strategy
-            if strategy == 'continuos_parallel':
-                strategy = ContinuousParallel(
-                    algorithms,
-                    data,
-                    target_metric,
-                    baseline_loss,
-                    tmp_dir,
-                    cpu_time_limit,
-                    max_evals,
-                    hpo_algo,
-                    self._debug
-                )
-            else:
-                strategy = BasicReduction(
-                    algorithms,
-                    data,
-                    target_metric,
-                    baseline_loss,
-                    tmp_dir,
-                    hpo_algo=hpo_algo,
-                    debug=self._debug
-                )
+            algorithms = FULL_ALGO_LIST
 
-            best_model, best_params, best_score, tasks = strategy.evaluate()
+            # Initialize the strategy to be used to optimize. Currently only one strategy implemented.
+            strategy = ContinuousParallel(
+                algorithms,
+                data,
+                target_metric,
+                baseline_loss,
+                tmp_dir,
+                time_limit=cpu_time_limit,
+                max_evals=max_evals,
+                hpo_algo=hpo_algo,
+                verbose=self.verbose,
+            )
 
-        return best_model, best_params, best_score, tasks
+            best_algo, best_params, best_score, tasks = strategy.evaluate()
+
+        if self.verbose:
+            print("----Done!----")
+            print("Best algorithm: {0}".format(best_algo))
+            print("Best hyperparameters: {0}".format(best_params))
+            
+        return best_algo, best_params, best_score, tasks
 
     def build_model(self, algo_name, params):
         algo = SURPRISE_ALGORITHM_MAP[algo_name]
-        if (params):
+        if params:
             return algo(**params)
         else:
             return algo()

@@ -15,11 +15,19 @@ class TestTrainer(unittest.TestCase):
             tasks = {}
             trainer.start_with_limits(2, 10, tasks)
             self.assertTrue(tasks["svd"])
-            self.assertTrue(tasks["svd"]["score"])
-            self.assertListEqual(list(tasks["svd"]["score"].keys()), ["loss", "status", "hyperparams"])
+            self.assertListEqual(list(tasks["svd"].keys()), ["loss", "status", "hyperparams", "exception"])
 
-        with self.subTest(msg="With timeout exception, trainer should still populate tasks with exception tag true"):
+        with self.subTest(msg="With timeout exception, trainer should still populate tasks with exception tag false"):
             tasks = {}
             trainer.start_with_limits(100, 10, tasks)
             self.assertTrue(tasks["svd"])
-            self.assertNotIn("exception", tasks["svd"])
+            self.assertEqual(tasks["svd"]["exception"], False)
+
+        with self.subTest(msg="With timeout exception, but the job was not evaluated even once"):
+            tasks = {}
+            # Running SVD++ as it generally has a longer execution time. Only giving a timer for 1 second
+            trainer = Trainer(self.tmp_path, algo="svdpp", data=self.data)           
+            trainer.start_with_limits(100, 1, tasks)
+            self.assertTrue(tasks["svdpp"])
+            self.assertEqual(tasks["svdpp"]["exception"], False)
+            self.assertIsNone(tasks["svdpp"]["loss"])
