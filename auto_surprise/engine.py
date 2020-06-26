@@ -20,12 +20,13 @@ import auto_surprise.validation_util as validation_util
 
 
 class Engine(object):
-    def __init__(self, verbose=True):
+    def __init__(self, verbose=True, algorithms=FULL_ALGO_LIST):
         """
         Initialize new engine
         """
         self.__logger = logging.getLogger(__name__)
         self.verbose = verbose
+        self.algorithms = algorithms
         self._current_path = pathlib.Path().absolute()
 
     def train(
@@ -69,11 +70,9 @@ class Engine(object):
             if self.verbose:
                 print("Baseline loss : {0}".format(baseline_loss))
 
-            algorithms = FULL_ALGO_LIST
-
             # Initialize the strategy to be used to optimize. Currently only one strategy implemented.
             strategy = ContinuousParallel(
-                algorithms,
+                self.algorithms,
                 data,
                 target_metric,
                 baseline_loss,
@@ -90,7 +89,7 @@ class Engine(object):
             print("----Done!----")
             print("Best algorithm: {0}".format(best_algo))
             print("Best hyperparameters: {0}".format(best_params))
-            
+
         return best_algo, best_params, best_score, tasks
 
     def build_model(self, algo_name, params):
