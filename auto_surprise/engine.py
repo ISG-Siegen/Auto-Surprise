@@ -6,7 +6,6 @@ from auto_surprise.constants import (
     DEFAULT_TARGET_METRIC,
     DEFAULT_MAX_EVALS,
     FULL_ALGO_LIST,
-    QUICK_COMPUTE_ALGO_LIST,
     BASELINE_ALGO,
     EVALS_MULTIPLIER,
     SURPRISE_ALGORITHM_MAP,
@@ -46,6 +45,7 @@ class Engine(object):
             validation_util.validate_target_metric(target_metric)
             validation_util.validate_dataset(data)
             validation_util.validate_max_evals(max_evals)
+            validation_util.validate_cpu_time_limit(cpu_time_limit)
         except ValidationError as err:
             """
             Catch validation errors. Auto-Surprise cannot run with these exceptions
