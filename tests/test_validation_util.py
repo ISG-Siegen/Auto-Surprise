@@ -34,3 +34,11 @@ class TestValidationUtil(unittest.TestCase):
 
         self.assertRaises(ValidationError, validation_util.validate_max_evals, "3.14")
         self.assertTrue(validation_util.validate_max_evals(10))
+
+    def test_validate_cpu_time_limit(self):
+        """
+        Validate that max evals is an integer greater than 0
+        """
+
+        self.assertRaises(ValidationError, validation_util.validate_cpu_time_limit, "0.451")
+        self.assertTrue(validation_util.validate_cpu_time_limit(10))

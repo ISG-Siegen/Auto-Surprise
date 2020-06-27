@@ -43,3 +43,17 @@ def validate_max_evals(max_evals):
         )
     else:
         return True
+
+def validate_cpu_time_limit(cpu_time_limit):
+    """
+    Execution time limit. Must be an unsigned integer greater than 0
+    """
+    if not isinstance(cpu_time_limit, int) or not cpu_time_limit > 0:
+        raise ValidationError(
+            "cpu_time_limit",
+            "cpu_time_limit must be an unsigned integer greater than 0. Got {0}".format(
+                cpu_time_limit
+            ),
+        )
+    else:
+        return True
