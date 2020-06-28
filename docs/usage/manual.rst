@@ -44,9 +44,10 @@ Initializing Auto-Surprise Engine
 
 .. code-block:: python
 
-    engine = Engine(debug=True)
+    engine = Engine(verbose=True, algorithms=['svd', 'svdpp', 'knn_basic', 'knn_baseline'])
 
-Currently only the parameter available is `debug`, which will raise any caught exceptions instead of trying to continue the process 
+* `verbose` : By default set to `True`. Controls the verbosity of Auto-Surprise.
+* `algorithms` : The algorithms to be optimized. Must be in the form of an array of strings. Available choices are `['svd', 'svdpp', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']` 
 
 Starting the Optimization process
 .................................
