@@ -68,7 +68,6 @@ class Trainer(object):
 
             return False, False
 
-
     def start_with_limits(self, max_evals, time_limit, tasks):
         """
         Start the trainer with a time limit
@@ -88,10 +87,7 @@ class Trainer(object):
                             reverse=False,
                         )[0]
 
-                    tasks[self.algo_name] = {
-                        **best_trial,
-                        "exception": False
-                    }
+                    tasks[self.algo_name] = {**best_trial, "exception": False}
 
             except TimeoutException:
                 # Handle timeout when enforced cpu time limit is reached
@@ -102,14 +98,11 @@ class Trainer(object):
                         trials.results, key=lambda x: x["loss"], reverse=False
                     )[0]
                     # A timeout exception is not considered an algorithm exception
-                    tasks[self.algo_name] = {
-                        **best_trial,
-                        "exception": False
-                    }
+                    tasks[self.algo_name] = {**best_trial, "exception": False}
                 else:
                     # When no trials were completed before the job timed out
                     tasks[self.algo_name] = {
-                        "loss": None, 
+                        "loss": None,
                         "hyperparams": None,
                         "exception": False,
                     }
@@ -119,7 +112,7 @@ class Trainer(object):
                 self.__logger.error(traceback.format_exc())
 
                 tasks[self.algo_name] = {
-                    "loss": None, 
+                    "loss": None,
                     "hyperparams": None,
                     "exception": True,
                 }

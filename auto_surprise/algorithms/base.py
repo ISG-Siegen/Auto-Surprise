@@ -19,10 +19,11 @@ from auto_surprise.constants import (
     DEFAULT_HPO_ALGO,
     DEFAULT_CV_ITERS,
     SURPRISE_ALGORITHM_MAP,
-    DEFAULT_MAX_EVALS, 
+    DEFAULT_MAX_EVALS,
     ACCURACY_METRICS,
 )
 from auto_surprise.algorithms.spaces import HPO_SPACE_MAP
+
 
 class AlgorithmBase(object):
     def __init__(
@@ -51,7 +52,7 @@ class AlgorithmBase(object):
     def objective(self, params):
         if params:
             algo = self.algo(**params)
-        else: 
+        else:
             algo = self.algo()
 
         loss = cross_validate(
@@ -66,7 +67,7 @@ class AlgorithmBase(object):
         self._result_logger.append_results(loss, params)
 
         return {"loss": loss, "status": STATUS_OK, "hyperparams": params}
-    
+
     def best_hyperparams(self, max_evals):
         if self.space:
             best = fmin(

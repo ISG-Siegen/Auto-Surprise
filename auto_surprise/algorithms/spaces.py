@@ -86,15 +86,15 @@ CO_CLUSTERING_DEFAULT_SPACE = {
 }
 
 HPO_SPACE_MAP = {
-    'svd': SVD_DEFAULT_SPACE,
-    'svdpp': SVDPP_SPACE,
-    'nmf': NMF_DEFAULT_SPACE,
-    'knn_baseline': KNN_BASELINE_SPACE,
-    'knn_basic': KNN_DEFAULT_SPACE,
-    'knn_with_means': KNN_DEFAULT_SPACE,
-    'knn_with_z_score': KNN_DEFAULT_SPACE,
-    'co_clustering': CO_CLUSTERING_DEFAULT_SPACE,
-    'slope_one': None,
-    'baseline_only': BASELINE_ONLY_SPACE,
-    'normal_predictor': None,
+    "svd": SVD_DEFAULT_SPACE,
+    "svdpp": SVDPP_SPACE,
+    "nmf": NMF_DEFAULT_SPACE,
+    "knn_baseline": KNN_BASELINE_SPACE,
+    "knn_basic": KNN_DEFAULT_SPACE,
+    "knn_with_means": KNN_DEFAULT_SPACE,
+    "knn_with_z_score": KNN_DEFAULT_SPACE,
+    "co_clustering": CO_CLUSTERING_DEFAULT_SPACE,
+    "slope_one": None,
+    "baseline_only": BASELINE_ONLY_SPACE,
+    "normal_predictor": None,
 }
