@@ -3,21 +3,8 @@ import traceback
 import logging
 
 from surprise.model_selection import cross_validate
-from auto_surprise.algorithms import (
-    AutoSurpriseBaselineOnly,
-    AutoSurpriseCoClustering,
-    AutoSurpriseKNNBaseline,
-    AutoSurpriseKNNBasic,
-    AutoSurpriseKNNWithMeans,
-    AutoSurpriseKNNWithZScore,
-    AutoSurpriseNMF,
-    AutoSurpriseSlopeOne,
-    AutoSurpriseSVD,
-    AutoSurpriseSVDpp,
-    AutoSurpriseNormalPredictor,
-)
+from auto_surprise.algorithms.base import AlgorithmBase
 from auto_surprise.constants import (
-    ALGORITHM_MAP,
     DEFAULT_TARGET_METRIC,
     CV_N_JOBS,
     DEFAULT_HPO_ALGO,
@@ -42,13 +29,13 @@ class Trainer(object):
         """
         self.__logger = logging.getLogger(__name__)
         self.verbose = verbose
-        self._tmp_dir = tmp_dir
-        self._algo_name = algo
-        self._algo_class = ALGORITHM_MAP[algo]
+        self.tmp_dir = tmp_dir
+        self.algo_name = algo
 
         # Dynamically instantiate algorithm
-        self.algo = getattr(sys.modules[__name__], self._algo_class)(
+        self.algo_base = AlgorithmBase(
             data=data,
+            algo_name=self.algo_name,
             metric=target_metric,
             cv_n_jobs=CV_N_JOBS,
             hpo_algo=hpo_algo,
@@ -56,12 +43,14 @@ class Trainer(object):
         )
 
     def start(self, max_evals):
-
+        """
+        Start with no limits
+        """
         try:
-            with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
-                self.algo.set_result_logger(result_logger)
+            with ResultLoggingManager(self.tmp_dir, self.algo_name) as result_logger:
+                self.algo_base.set_result_logger(result_logger)
 
-                best, trials = self.algo.best_hyperparams(max_evals)
+                best, trials = self.algo_base.best_hyperparams(max_evals)
 
                 best_trial = None
                 # Sort best trial based on loss value
@@ -74,61 +63,62 @@ class Trainer(object):
 
                 return best, best_trial
         except Exception as e:
-            self.__logger.ERROR("Exception : ", e)
-            self.__logger.ERROR(traceback.format_exc())
+            self.__logger.error("Exception : ", e)
+            self.__logger.error(traceback.format_exc())
 
             return False, False
+
 
     def start_with_limits(self, max_evals, time_limit, tasks):
         """
         Start the trainer with a time limit
         """
-        with ResultLoggingManager(self._tmp_dir, self._algo_class) as result_logger:
+        with ResultLoggingManager(self.tmp_dir, self.algo_name) as result_logger:
             try:
                 # Although hyperopt.fmin does have a timout parameter, it doesnt seem to work with multiprocessing
                 with limits.run_with_enforced_limits(time_limit=time_limit):
-                    self.algo.set_result_logger(result_logger)
+                    self.algo_base.set_result_logger(result_logger)
 
-                    _, best_trial = self.algo.best_hyperparams(max_evals)
+                    _, best_trial = self.algo_base.best_hyperparams(max_evals)
 
-                    if self.algo.trials.results:
+                    if self.algo_base.trials.results:
                         best_trial = sorted(
-                            self.algo.trials.results,
+                            self.algo_base.trials.results,
                             key=lambda x: x["loss"],
                             reverse=False,
                         )[0]
 
-                    tasks[self._algo_name] = {
+                    tasks[self.algo_name] = {
                         **best_trial,
                         "exception": False
                     }
 
             except TimeoutException:
                 # Handle timeout when enforced cpu time limit is reached
-                trials = self.algo.trials
+                trials = self.algo_base.trials
 
                 if trials.results:
                     best_trial = sorted(
                         trials.results, key=lambda x: x["loss"], reverse=False
                     )[0]
                     # A timeout exception is not considered an algorithm exception
-                    tasks[self._algo_name] = {
+                    tasks[self.algo_name] = {
                         **best_trial,
                         "exception": False
                     }
                 else:
                     # When no trials were completed before the job timed out
-                    tasks[self._algo_name] = {
+                    tasks[self.algo_name] = {
                         "loss": None, 
                         "hyperparams": None,
                         "exception": False,
                     }
 
             except Exception:
-                self.__logger.error("Exception for algo {0}".format(self._algo_name))
+                self.__logger.error("Exception for algo {0}".format(self.algo_name))
                 self.__logger.error(traceback.format_exc())
 
-                tasks[self._algo_name] = {
+                tasks[self.algo_name] = {
                     "loss": None, 
                     "hyperparams": None,
                     "exception": True,
