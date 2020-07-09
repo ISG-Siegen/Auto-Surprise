@@ -31,14 +31,23 @@ SVDPP_SPACE = {
     "reg_yj": hp.loguniform("reg_yj", LR_LOG_LOWER, LR_LOG_UPPER),
 }
 
-# TODO: Shrinkage param is only used when pearson_baseline is selected. It would
-# be great if we could conditionally optimize if pearson_baseline is used
-SIMILARITY_OPTIONS_SPACE = {
-    "name": hp.choice("name", ["cosine", "msd", "pearson", "pearson_baseline"]),
-    "user_based": hp.choice("user_based", [False, True]),
-    "min_support": scope.int(hp.quniform("min_support", 1, 100, 1)),
-    "shrinkage": scope.int(hp.quniform("shrinkage", 1, 300, 1)),
-}
+# Conditioally define similarity options space since `shrinkage` only applies
+# for `pearson_baseline` similarity.
+@scope.define
+def define_similarity_options_space(name, user_based, min_support, shrinkage):
+    space = {"name": name, "user_based": user_based, "min_support": min_support}
+    if name == "pearson_baseline":
+        space.update({"shrinkage": shrinkage})
+
+    return space
+
+
+SIMILARITY_OPTIONS_SPACE = scope.define_similarity_options_space(
+    hp.choice("name", ["cosine", "msd", "pearson", "pearson_baseline"]),
+    hp.choice("user_based", [False, True]),
+    scope.int(hp.quniform("min_support", 1, 100, 1)),
+    scope.int(hp.quniform("shrinkage", 1, 300, 1)),
+)
 
 BSL_OPTIONS_SPACE = hp.choice(
     "bsl_options",
