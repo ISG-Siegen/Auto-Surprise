@@ -1,6 +1,8 @@
 import os
 import logging
 import pathlib
+from rich.console import Console
+from rich.table import Column, Table
 
 from auto_surprise.constants import (
     DEFAULT_TARGET_METRIC,
@@ -19,6 +21,7 @@ import auto_surprise.validation_util as validation_util
 
 
 class Engine(object):
+
     def __init__(self, verbose=True, algorithms=FULL_ALGO_LIST):
         """
         Initialize new engine
@@ -27,6 +30,8 @@ class Engine(object):
         self.verbose = verbose
         self.algorithms = algorithms
         self._current_path = pathlib.Path().absolute()
+        if self.verbose:
+            self.console = Console()
 
     def train(
         self,
@@ -89,6 +94,7 @@ class Engine(object):
             print("----Done!----")
             print("Best algorithm: {0}".format(best_algo))
             print("Best hyperparameters: {0}".format(best_params))
+            self.print_results_table(tasks)
 
         return best_algo, best_params, best_score, tasks
 
@@ -98,3 +104,14 @@ class Engine(object):
             return algo(**params)
         else:
             return algo()
+
+    def print_results_table(self, tasks):
+        table = Table(show_header=True, header_style="bold magenta")
+        table.add_column("Algorithm")
+        table.add_column("Hyperparameters")
+        table.add_column("Loss", justify="right")
+
+        for key, val in tasks.items():
+            table.add_row(key, str(val["hyperparams"]), str(val["loss"]))
+
+        self.console.print(table)
