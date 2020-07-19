@@ -87,7 +87,7 @@ class Trainer(object):
                             reverse=False,
                         )[0]
 
-                    tasks[self.algo_name] = {**best_trial, "exception": False}
+                    tasks[self.algo_name] = {**best_trial, "exception": False, "trials": self.algo_base.trials}
 
             except TimeoutException:
                 # Handle timeout when enforced cpu time limit is reached
@@ -98,13 +98,14 @@ class Trainer(object):
                         trials.results, key=lambda x: x["loss"], reverse=False
                     )[0]
                     # A timeout exception is not considered an algorithm exception
-                    tasks[self.algo_name] = {**best_trial, "exception": False}
+                    tasks[self.algo_name] = {**best_trial, "exception": False, "trials": trials}
                 else:
                     # When no trials were completed before the job timed out
                     tasks[self.algo_name] = {
                         "loss": None,
                         "hyperparams": None,
                         "exception": False,
+                        "trials": trials
                     }
 
             except Exception:
@@ -115,4 +116,5 @@ class Trainer(object):
                     "loss": None,
                     "hyperparams": None,
                     "exception": True,
+                    "trials": self.algo_base.trials
                 }
