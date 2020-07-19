@@ -116,4 +116,5 @@ class Trainer(object):
                     "loss": None,
                     "hyperparams": None,
                     "exception": True,
+                    "trials": self.algo_base.trials
                 }

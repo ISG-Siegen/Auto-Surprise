@@ -15,7 +15,7 @@ class TestTrainer(unittest.TestCase):
             tasks = {}
             trainer.start_with_limits(2, 10, tasks)
             self.assertTrue(tasks["svd"])
-            self.assertListEqual(list(tasks["svd"].keys()), ["loss", "status", "hyperparams", "exception"])
+            self.assertListEqual(list(tasks["svd"].keys()), ["loss", "status", "hyperparams", "exception", "trials"])
 
         with self.subTest(msg="With timeout exception, trainer should still populate tasks with exception tag false"):
             tasks = {}
