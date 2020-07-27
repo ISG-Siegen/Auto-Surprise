@@ -7,7 +7,8 @@ install_requires = [
     "lightgbm",
     "numpy",
     "scikit-learn==0.22.0",
-    "scikit-surprise"
+    "scikit-surprise",
+    "rich"
 ]
 
 with open("README.md", "r") as fh:
