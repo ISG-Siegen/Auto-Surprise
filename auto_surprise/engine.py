@@ -1,6 +1,7 @@
 import os
 import logging
 import pathlib
+import numpy
 from rich.console import Console
 from rich.table import Column, Table
 
@@ -21,15 +22,18 @@ import auto_surprise.validation_util as validation_util
 
 
 class Engine(object):
-
-    def __init__(self, verbose=True, algorithms=FULL_ALGO_LIST):
+    def __init__(
+        self, verbose=True, algorithms=FULL_ALGO_LIST, random_state=numpy.random
+    ):
         """
         Initialize new engine
         """
         self.__logger = logging.getLogger(__name__)
         self.verbose = verbose
         self.algorithms = algorithms
+        self.random_state = random_state
         self._current_path = pathlib.Path().absolute()
+
         if self.verbose:
             self.console = Console()
 
@@ -86,6 +90,7 @@ class Engine(object):
                 max_evals=max_evals,
                 hpo_algo=hpo_algo,
                 verbose=self.verbose,
+                random_state=self.random_state,
             )
 
             best_algo, best_params, best_score, tasks = strategy.evaluate()

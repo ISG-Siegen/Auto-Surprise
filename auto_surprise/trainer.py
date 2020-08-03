@@ -23,6 +23,7 @@ class Trainer(object):
         target_metric=DEFAULT_TARGET_METRIC,
         hpo_algo=DEFAULT_HPO_ALGO,
         verbose=False,
+        random_state=None,
     ):
         """
         Initialize new trainer
@@ -40,6 +41,7 @@ class Trainer(object):
             cv_n_jobs=CV_N_JOBS,
             hpo_algo=hpo_algo,
             verbose=verbose,
+            random_state=random_state,
         )
 
     def start(self, max_evals):
@@ -87,7 +89,11 @@ class Trainer(object):
                             reverse=False,
                         )[0]
 
-                    tasks[self.algo_name] = {**best_trial, "exception": False, "trials": self.algo_base.trials}
+                    tasks[self.algo_name] = {
+                        **best_trial,
+                        "exception": False,
+                        "trials": self.algo_base.trials,
+                    }
 
             except TimeoutException:
                 # Handle timeout when enforced cpu time limit is reached
@@ -98,14 +104,18 @@ class Trainer(object):
                         trials.results, key=lambda x: x["loss"], reverse=False
                     )[0]
                     # A timeout exception is not considered an algorithm exception
-                    tasks[self.algo_name] = {**best_trial, "exception": False, "trials": trials}
+                    tasks[self.algo_name] = {
+                        **best_trial,
+                        "exception": False,
+                        "trials": trials,
+                    }
                 else:
                     # When no trials were completed before the job timed out
                     tasks[self.algo_name] = {
                         "loss": None,
                         "hyperparams": None,
                         "exception": False,
-                        "trials": trials
+                        "trials": trials,
                     }
 
             except Exception:
@@ -116,5 +126,5 @@ class Trainer(object):
                     "loss": None,
                     "hyperparams": None,
                     "exception": True,
-                    "trials": self.algo_base.trials
+                    "trials": self.algo_base.trials,
                 }
