@@ -1,6 +1,7 @@
 from auto_surprise.constants import DEFAULT_MAX_EVALS, DEFAULT_HPO_ALGO
 
-class StrategyBase():
+
+class StrategyBase:
     def __init__(
         self,
         algorithms,
@@ -12,6 +13,7 @@ class StrategyBase():
         max_evals=DEFAULT_MAX_EVALS,
         hpo_algo=DEFAULT_HPO_ALGO,
         verbose=False,
+        random_state=None,
     ):
         self.algorithms = algorithms
         self.data = data
@@ -22,3 +24,4 @@ class StrategyBase():
         self.hpo_algo = hpo_algo
         self.max_evals = max_evals
         self.verbose = verbose
+        self.random_state = random_state

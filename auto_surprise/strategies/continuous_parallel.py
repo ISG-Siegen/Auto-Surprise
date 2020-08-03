@@ -40,6 +40,7 @@ class ContinuousParallel(StrategyBase):
                     target_metric=self.target_metric,
                     hpo_algo=self.hpo_algo,
                     verbose=self.verbose,
+                    random_state=self.random_state,
                 )
                 p = multiprocessing.Process(
                     target=trainer.start_with_limits,
@@ -52,7 +53,7 @@ class ContinuousParallel(StrategyBase):
             for process in processes:
                 process.join()
 
-            passed_jobs = {k:v for k,v in tasks.items() if v["loss"]}
+            passed_jobs = {k: v for k, v in tasks.items() if v["loss"]}
             best_algo = min(passed_jobs.items(), key=(lambda x: x[1]["loss"]))[0]
             best_params = passed_jobs[best_algo]["hyperparams"]
             best_score = passed_jobs[best_algo]["loss"]

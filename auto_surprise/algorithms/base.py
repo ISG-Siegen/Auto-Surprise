@@ -35,6 +35,7 @@ class AlgorithmBase(object):
         cv_n_jobs=CV_N_JOBS,
         hpo_algo=DEFAULT_HPO_ALGO,
         verbose=False,
+        random_state=None,
     ):
         self.algo = SURPRISE_ALGORITHM_MAP[algo_name]
         self.cv = cv
@@ -45,6 +46,7 @@ class AlgorithmBase(object):
         self.hpo_algo = hpo_algo
         self.trials = Trials()
         self.space = HPO_SPACE_MAP[algo_name]
+        self.random_state = random_state
 
     def set_result_logger(self, result_logger_manager):
         self._result_logger = result_logger_manager
@@ -77,6 +79,7 @@ class AlgorithmBase(object):
                 max_evals=max_evals,
                 trials=self.trials,
                 verbose=self.verbose,
+                rstate=self.random_state,
             )
             return best, self.trials
         else:
