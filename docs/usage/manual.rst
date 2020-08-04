@@ -46,8 +46,9 @@ Initializing Auto-Surprise Engine
 
     engine = Engine(verbose=True, algorithms=['svd', 'svdpp', 'knn_basic', 'knn_baseline'])
 
-* `verbose` : By default set to `True`. Controls the verbosity of Auto-Surprise.
-* `algorithms` : The algorithms to be optimized. Must be in the form of an array of strings. Available choices are `['svd', 'svdpp', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']` 
+* `verbose`: By default set to `True`. Controls the verbosity of Auto-Surprise.
+* `algorithms`: The algorithms to be optimized. Must be in the form of an array of strings. Available choices are `['svd', 'svdpp', 'nmf', 'knn_basic', 'knn_baseline', 'knn_with_means', 'knn_with_z_score', 'co_clustering', 'slope_one', 'baseline_only']` 
+* `random_state`: Takes `numpy.random.RandomState`. Set this, as well as `random.seed` and `numpy.seed`, to make experiments reproducible.
 
 Starting the Optimization process
 .................................
@@ -66,9 +67,9 @@ To start the optimization method, you can use the `train` method of `Engine`. Th
 
 There are a few parameters you can use.
 
-* `data` : The data as an instance of `surprise.dataset.DatasetAutoFolds`.
-* `target_metric` : The metric we seek to minimize. Available options are `test_rmse` and `test_mae`.
-* `cpu_time_limit` : The time limit we want to train. This is in seconds. For datasets like Movielens 100k, 1-2 hours is sufficient. But you may want to increase this based on the size of your dataset
+* `data`: The data as an instance of `surprise.dataset.DatasetAutoFolds`.
+* `target_metric`: The metric we seek to minimize. Available options are `test_rmse` and `test_mae`.
+* `cpu_time_limit`: The time limit we want to train. This is in seconds. For datasets like Movielens 100k, 1-2 hours is sufficient. But you may want to increase this based on the size of your dataset
 * `max_evals`: The maximum number of evaluations each algorithm gets for hyper parameter optimization.
 * `hpo_algo`: Auto-Surprise uses Hyperopt for hyperparameter tuning. By default, it's set to use TPE, but you can change this to any algorithm supported by hyperopt, such as Adaptive TPE or Random search.
 
