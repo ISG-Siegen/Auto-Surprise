@@ -24,6 +24,7 @@ class Trainer(object):
         hpo_algo=DEFAULT_HPO_ALGO,
         verbose=False,
         random_state=None,
+        baseline_loss=None,
     ):
         """
         Initialize new trainer
@@ -42,6 +43,7 @@ class Trainer(object):
             hpo_algo=hpo_algo,
             verbose=verbose,
             random_state=random_state,
+            baseline_loss=baseline_loss,
         )
 
     def start(self, max_evals):

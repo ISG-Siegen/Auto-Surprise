@@ -41,6 +41,7 @@ class ContinuousParallel(StrategyBase):
                     hpo_algo=self.hpo_algo,
                     verbose=self.verbose,
                     random_state=self.random_state,
+                    baseline_loss=self.baseline_loss,
                 )
                 p = multiprocessing.Process(
                     target=trainer.start_with_limits,
