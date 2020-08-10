@@ -11,7 +11,7 @@ It uses the popular scikit library `Surprise <http://surpriselib.com/>`_ for rec
 
 Unfortunately, currently only linux systems are supported, but you can use WSL in windows as well.
 
-To get started with Auto-Surprise, check out the :ref:`quick_start` guide. If you have any issues or doubts, head over to the `Github repository <https://github.com/BeelGroup/Auto-Surprise>`_
+To get started with Auto-Surprise, check out the :ref:`quick_start` guide. If you have any issues or doubts, head over to the `Github repository <https://github.com/BeelGroup/Auto-Surprise>`_ and create an issue.
 
 .. toctree::
    :maxdepth: 3
@@ -20,3 +20,9 @@ To get started with Auto-Surprise, check out the :ref:`quick_start` guide. If yo
    usage/quick_start
    usage/manual
    usage/reproducing_experiments
+
+.. toctree::
+   :caption: Benchmarks:
+
+   benchmarks/evaluation
+   benchmarks/results
