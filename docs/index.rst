@@ -15,14 +15,14 @@ To get started with Auto-Surprise, check out the :ref:`quick_start` guide. If yo
 
 .. toctree::
    :maxdepth: 3
-   :caption: Usage Guide:
+   :caption: Usage Guide
    
    usage/quick_start
    usage/manual
    usage/reproducing_experiments
 
 .. toctree::
-   :caption: Benchmarks:
+   :caption: Benchmarks
 
    benchmarks/evaluation
    benchmarks/results
