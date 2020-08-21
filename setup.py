@@ -1,3 +1,10 @@
+"""
+When updating version
+
+- Update version and download URL here
+- Update release version in Docs configuration
+"""
+
 import setuptools
 
 __version__ = "0.1.6"
