@@ -73,3 +73,24 @@ You can build a pickelable model as shown.
 ```python
 model = engine.build_model(best_algo, best_params)
 ```
+
+# Benchmarks
+
+In my testing, Auto-Surprise performed anywhere from 0.8 to 4% improvement in RMSE compared to the best performing default algorithm configuration. In the table below are the results for the Jester 2 dataset. Benchmark results for Movielens and Book-Crossing dataset are also available [here](https://auto-surprise.readthedocs.io/en/stable/benchmarks/results.html)
+
+|       Algorithm      |  RMSE  |   MAE  |   Time   |
+|:--------------------:|:------:|:------:|:--------:|
+| Normal Predictor     |  7.277 |  5.886 | 00:00:01 |
+| SVD                  |  4.905 |  3.97  | 00:00:13 |
+| SVD++                |  5.102 |  4.055 | 00:00:29 |
+| NMF                  |   --   |   --   |    --    |
+| Slope One            |  5.189 |  3.945 | 00:00:02 |
+| KNN Basic            |  5.078 |  4.034 | 00:02:14 |
+| KNN with Means       |  5.124 |  3.955 | 00:02:16 |
+| KNN with   Z-score   |  5.219 |  3.955 | 00:02:20 |
+| KNN Baseline         |  4.898 |  3.896 | 00:02:14 |
+| Co-clustering        |  5.153 |  3.917 | 00:00:12 |
+| Baseline Only        |  4.849 |  3.934 | 00:00:01 |
+| GridSearch           | 4.7409 | 3.8147 | 80:52:35 |
+| Auto-Surprise (TPE)  | 4.6489 | 3.6837 | 02:00:10 |
+| Auto-Surprise (ATPE) | 4.6555 | 3.6906 | 02:00:01 |
