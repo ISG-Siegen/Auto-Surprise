@@ -73,10 +73,10 @@ class AlgorithmBase(object):
         return {"loss": loss, "status": STATUS_OK, "hyperparams": params}
 
     def early_baseline_loss_stop(self, trials):
-        if (len(trials) == 10 and self.baseline_loss < trials.best_trial["loss"]):
+        if len(trials) == 10 and self.baseline_loss < trials.best_trial["result"]["loss"]:
             return True, { "failed_baseline_check": True }
         else:
-            return False, _
+            return False, { "failed_baseline_check": False }
 
     def best_hyperparams(self, max_evals):
         if self.space:

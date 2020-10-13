@@ -10,10 +10,10 @@ import setuptools
 __version__ = "0.1.6"
 
 install_requires = [
-    "hyperopt",
+    "hyperopt>=0.2.5",
     "lightgbm",
     "numpy",
-    "scikit-learn==0.22.0",
+    "scikit-learn>=0.23.0",
     "scikit-surprise",
     "rich"
 ]
@@ -30,7 +30,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/BeelGroup/Auto-Surprise",
-    download_url="https://github.com/BeelGroup/Auto-Surprise/archive/v0.1.4.tar.gz",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
