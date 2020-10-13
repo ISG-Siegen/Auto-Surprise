@@ -1,5 +1,4 @@
 import unittest
-import pathlib
 import utils as test_utils
 from auto_surprise.trainer import Trainer
 

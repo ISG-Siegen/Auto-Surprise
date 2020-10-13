@@ -76,6 +76,7 @@ class Engine(object):
                 verbose=self.verbose,
             )
             baseline_loss = baseline_trainer.start(1)[1]["loss"]
+
             if self.verbose:
                 print("Baseline loss : {0}".format(baseline_loss))
 

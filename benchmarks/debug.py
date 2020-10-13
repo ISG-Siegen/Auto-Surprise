@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     # Run auto surprise
     start_time = time.time()
-    engine = Engine(verbose=True, random_state=numpy.random.RandomState(1))
+    engine = Engine(verbose=True, random_state=numpy.random.RandomState(1), algorithms=["baseline_only", "knn_basic"])
     best_model, best_params, best_score, tasks = engine.train(
         data=data,
         target_metric="test_rmse",
