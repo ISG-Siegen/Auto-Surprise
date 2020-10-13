@@ -49,7 +49,8 @@ class AlgorithmBase(object):
         self.space = HPO_SPACE_MAP[algo_name]
         self.random_state = random_state
         self.baseline_loss = baseline_loss
-
+        self._result_logger = None
+    
     def set_result_logger(self, result_logger_manager):
         self._result_logger = result_logger_manager
 
@@ -68,12 +69,15 @@ class AlgorithmBase(object):
             verbose=self.verbose,
         )[self.metric].mean()
 
-        self._result_logger.append_results(loss, params)
+        if self._result_logger:
+            self._result_logger.append_results(loss, params)
 
         return {"loss": loss, "status": STATUS_OK, "hyperparams": params}
 
     def early_baseline_loss_stop(self, trials, *stop_args):
-        if len(trials) == 10 and self.baseline_loss < trials.best_trial["result"]["loss"]:
+        best_trial = trials.best_trial
+
+        if len(trials) == 10 and best_trial and self.baseline_loss < best_trial["result"]["loss"]:
             return True, { "failed_baseline_check": True }
         else:
             return False, { "failed_baseline_check": False }
