@@ -72,7 +72,7 @@ class AlgorithmBase(object):
 
         return {"loss": loss, "status": STATUS_OK, "hyperparams": params}
 
-    def early_baseline_loss_stop(self, trials):
+    def early_baseline_loss_stop(self, trials, *stop_args):
         if len(trials) == 10 and self.baseline_loss < trials.best_trial["result"]["loss"]:
             return True, { "failed_baseline_check": True }
         else:
