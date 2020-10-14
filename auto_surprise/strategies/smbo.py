@@ -5,7 +5,7 @@ from auto_surprise.trainer import Trainer
 from auto_surprise.strategies.base import StrategyBase
 
 
-class ContinuousParallel(StrategyBase):
+class SMBO(StrategyBase):
     """
     Executes all alogrithms in parallel until time limit exceeded or max evals reached.
     """
@@ -19,7 +19,7 @@ class ContinuousParallel(StrategyBase):
         Evaluate performance of algorithms
         """
 
-        self.__logger.info("Starting evaluation using strategy : ContinuousParallel")
+        self.__logger.info("Starting evaluation using strategy : SMBO")
 
         max_evals = self.max_evals
         processes = []
