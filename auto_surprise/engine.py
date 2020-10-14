@@ -17,7 +17,7 @@ from auto_surprise.constants import (
 from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
 from auto_surprise.context.backend import BackendContextManager
-from auto_surprise.strategies.continuous_parallel import ContinuousParallel
+from auto_surprise.strategies.smbo import SMBO
 import auto_surprise.validation_util as validation_util
 
 
@@ -81,7 +81,7 @@ class Engine(object):
                 print("Baseline loss : {0}".format(baseline_loss))
 
             # Initialize the strategy to be used to optimize. Currently only one strategy implemented.
-            strategy = ContinuousParallel(
+            strategy = SMBO(
                 self.algorithms,
                 data,
                 target_metric,
