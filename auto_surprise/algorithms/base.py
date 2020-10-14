@@ -76,7 +76,6 @@ class AlgorithmBase(object):
 
     def early_baseline_loss_stop(self, trials, *stop_args):
         best_trial = trials.best_trial
-
         if len(trials) == 10 and best_trial and self.baseline_loss < best_trial["result"]["loss"]:
             return True, { "failed_baseline_check": True }
         else:
@@ -84,16 +83,21 @@ class AlgorithmBase(object):
 
     def best_hyperparams(self, max_evals):
         if self.space:
-            best = fmin(
-                self.objective,
-                self.space,
-                algo=self.hpo_algo,
-                max_evals=max_evals,
-                trials=self.trials,
-                verbose=self.verbose,
-                rstate=self.random_state,
-                early_stop_fn=self.early_baseline_loss_stop,
-            )
+            fmin_args = {
+                "fn": self.objective,
+                "space": self.space,
+                "algo": self.hpo_algo,
+                "max_evals": max_evals,
+                "trials": self.trials,
+                "verbose": self.verbose,
+                "rstate": self.random_state,
+            }
+
+            if self.baseline_loss:
+                fmin_args["early_stop_fn"] = self.early_baseline_loss_stop
+            
+            best = fmin(**fmin_args)
+
             return best, self.trials
         else:
             best = self.objective(None)
