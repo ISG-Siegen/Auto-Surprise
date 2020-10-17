@@ -7,8 +7,6 @@ When updating version
 
 import setuptools
 
-__version__ = "0.1.6"
-
 install_requires = [
     "hyperopt>=0.2.5",
     "lightgbm",
@@ -21,9 +19,12 @@ install_requires = [
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("auto_surprise/__version__.py") as fh:
+    version = fh.readlines()[-1].split()[-1].strip("\"'")
+
 setuptools.setup(
     name="auto-surprise",
-    version=__version__,
+    version=version,
     author="Rohan Anand",
     author_email="anandr@tcd.ie",
     description="A python package that automates algorithm selection and hyperparameter tuning for the recommender system library Surprise",
