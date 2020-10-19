@@ -18,6 +18,7 @@ from auto_surprise.trainer import Trainer
 from auto_surprise.exceptions import ValidationError
 from auto_surprise.context.backend import BackendContextManager
 from auto_surprise.strategies.smbo import SMBO
+from auto_surprise.__version__ import __version__
 import auto_surprise.validation_util as validation_util
 
 
@@ -49,6 +50,9 @@ class Engine(object):
         Train and find most optimal model and hyperparameters
         """
 
+        if self.verbose:
+            self.console.print("auto_surprise {0}".format(__version__))
+
         try:
             # Validations
             validation_util.validate_target_metric(target_metric)
@@ -65,7 +69,7 @@ class Engine(object):
         # Determine baseline value from random normal predictor
         with BackendContextManager(self._current_path) as tmp_dir:
             if self.verbose:
-                print("Available CPUs: {0}".format(os.cpu_count()))
+                self.console.print("Available CPUs: {0}".format(os.cpu_count()))
 
             # Calculate baseline first. This can be used to early stop training of algorithms if results are not optimal
             baseline_trainer = Trainer(
@@ -78,7 +82,7 @@ class Engine(object):
             baseline_loss = baseline_trainer.start(1)[1]["loss"]
 
             if self.verbose:
-                print("Baseline loss : {0}".format(baseline_loss))
+                self.console.print("Baseline loss: {0}".format(baseline_loss))
 
             # Initialize the strategy to be used to optimize. Currently only one strategy implemented.
             strategy = SMBO(
@@ -97,9 +101,9 @@ class Engine(object):
             best_algo, best_params, best_score, tasks = strategy.evaluate()
 
         if self.verbose:
-            print("----Done!----")
-            print("Best algorithm: {0}".format(best_algo))
-            print("Best hyperparameters: {0}".format(best_params))
+            self.console.print("----Done!----")
+            self.console.print("Best algorithm: {0}".format(best_algo))
+            self.console.print("Best hyperparameters: {0}".format(best_params))
             self.print_results_table(tasks)
 
         return best_algo, best_params, best_score, tasks
