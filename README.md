@@ -94,3 +94,7 @@ In my testing, Auto-Surprise performed anywhere from 0.8 to 4% improvement in RM
 | GridSearch           | 4.7409 | 3.8147 | 80:52:35 |
 | Auto-Surprise (TPE)  | 4.6489 | 3.6837 | 02:00:10 |
 | Auto-Surprise (ATPE) | 4.6555 | 3.6906 | 02:00:01 |
+
+# Papers
+
+[Auto-Surprise: An Automated Recommender-System (AutoRecSys) Library with Tree of Parzens Estimator (TPE) Optimization](https://dl.acm.org/doi/abs/10.1145/3383313.3411467?casa_token=ADmaOhK2tHgAAAAA:4UXHmuLXM_gJYQdUZp7ab5hwn-eNv2Daot5FtfYLG3m1KYLc99Y1_rhwzY2qcCJySUhoFBAfGnt5Qg)
