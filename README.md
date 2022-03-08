@@ -9,7 +9,7 @@ Auto-Surprise is built as a wrapper around the Python [Surprise](https://surpris
 
 # Setup
 
-Auto-Surprise is easy to install with Pip. You will require Python>=3.6 installed on a linux system. Currently not supported in windows, but can be used using [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+Auto-Surprise is easy to install with Pip, and required Python>=3.6 installed on a linux system. Currently not supported in windows, but can be used using [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 ```bash
 $ pip install auto-surprise
