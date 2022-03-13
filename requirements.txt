@@ -15,7 +15,7 @@ joblib==0.14.1
 lightgbm==2.3.1
 MarkupSafe==1.1.1
 networkx==2.2
-numpy==1.18.2
+numpy==1.22.3
 packaging==20.4
 pandas==1.0.3
 psutil==5.7.0
@@ -30,7 +30,7 @@ requests==2.23.0
 rich==3.3.2
 scikit-learn==0.23
 scikit-optimize==0.7.4
-scikit-surprise==1.1.0
+scikit-surprise==1.1.1
 scipy==1.4.1
 six==1.14.0
 snowballstemmer==2.0.0
@@ -45,4 +45,4 @@ sphinxcontrib-serializinghtml==1.1.4
 surprise==0.1
 threadpoolctl==2.0.0
 tqdm==4.43.0
-urllib3==1.26.5
+urllib3<1.26
