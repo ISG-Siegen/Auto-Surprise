@@ -9,7 +9,6 @@ import setuptools
 
 install_requires = [
     "hyperopt>=0.2.5",
-    "lightgbm",
     "numpy",
     "scikit-learn>=0.23.0",
     "scikit-surprise",
