@@ -1,6 +1,5 @@
 import time
 import datetime
-import pathlib
 import logging
 
 class ResultLoggingManager:
