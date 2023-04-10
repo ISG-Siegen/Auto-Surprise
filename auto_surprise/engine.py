@@ -24,7 +24,7 @@ import auto_surprise.validation_util as validation_util
 
 class Engine(object):
     def __init__(
-        self, verbose=True, algorithms=FULL_ALGO_LIST, random_state=numpy.random
+        self, verbose=True, algorithms=FULL_ALGO_LIST, random_state=numpy.random.default_rng()
     ):
         """
         Initialize new engine
