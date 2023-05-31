@@ -1,0 +1,11 @@
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = [
+    "setuptools",
+    "wheel",
+    "hyperopt>=0.2.5",
+    "numpy",
+    "scikit-learn>=0.23.0",
+    "scikit-surprise",
+    "rich"
+]
