@@ -3,9 +3,9 @@
 requires = [
     "setuptools",
     "wheel",
-    "hyperopt>=0.2.5",
+    "hyperopt>=0.2.7",
     "numpy",
-    "scikit-learn>=0.23.0",
+    "scikit-learn>=1.2.2",
     "scikit-surprise",
     "rich"
 ]

@@ -1,19 +1,7 @@
-"""
-When updating version
-
-- Update version and download URL here
-- Update release version in Docs configuration
-"""
-
 import setuptools
 
-install_requires = [
-    "hyperopt>=0.2.5",
-    "numpy",
-    "scikit-learn>=0.23.0",
-    "scikit-surprise",
-    "rich"
-]
+with open("requirements.txt", "r") as fh:
+    install_requires =[line.strip() for line in fh.read().split("\n")]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -29,7 +17,7 @@ setuptools.setup(
     description="A python package that automates algorithm selection and hyperparameter tuning for the recommender system library Surprise",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/BeelGroup/Auto-Surprise",
+    url="https://github.com/ISG-Siegen/Auto-Surprise",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
