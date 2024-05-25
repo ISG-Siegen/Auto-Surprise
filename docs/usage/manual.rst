@@ -76,7 +76,7 @@ There are a few parameters you can use.
 Building the best Model
 .......................
 
-You can use the best alogithm and best hypermaters you got from the `train` method to build a model.
+You can use the best algorithm and best hyperparameters you got from the `train` method to build a model.
 
 .. code-block:: python
     
